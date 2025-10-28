@@ -73,22 +73,25 @@ The frontend will start on `http://localhost:3000`
 
 ## Usage
 
+### Default Accounts
+
+The application automatically creates default accounts on first startup:
+
+**Admin Account:**
+- Email: `admin@quiz.com`
+- Password: `admin123`
+- Role: ADMIN
+
+**Test User Account:**
+- Email: `user@quiz.com`
+- Password: `user123`
+- Role: USER
+
 ### First Time Setup
 
 1. Open `http://localhost:3000` in your browser
-2. Register a new account
-3. By default, new users have the USER role
-
-### Creating an Admin User
-
-To create an admin user, you can either:
-- Manually update a user's role in MongoDB
-- Or modify the `AuthService.java` to create the first user as ADMIN
-
-```java
-// In AuthService.java register method, change:
-.role(User.UserRole.ADMIN)  // Instead of USER
-```
+2. Login with one of the default accounts above, or register a new account
+3. New registered users have the USER role by default
 
 ### User Flow
 

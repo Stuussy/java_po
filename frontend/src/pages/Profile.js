@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { testsAPI } from '../api/tests';
+import { authAPI } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
+import AvatarSelector from '../components/auth/AvatarSelector';
+import { getAvatarById } from '../utils/avatars';
+import '../styles/AvatarSelector.css';
 
 const Profile = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUser } = useAuth();
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
 
   useEffect(() => {
     loadAttempts();
@@ -23,27 +28,71 @@ const Profile = () => {
     }
   };
 
+  const handleAvatarSelect = async (avatarId) => {
+    try {
+      const updatedUser = await authAPI.updateAvatar(avatarId);
+      updateUser({ avatar: updatedUser.avatar });
+      setShowAvatarSelector(false);
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      alert('Failed to update avatar');
+    }
+  };
+
+  const currentAvatar = getAvatarById(user?.avatar || 'avatar1');
+
   return (
     <div className="main-content">
       <div className="container">
         <div className="card">
           <h1 className="card-title">My Profile</h1>
 
-          <div style={{ marginTop: '1.5rem' }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <strong>Name:</strong> {user?.name}
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <strong>Email:</strong> {user?.email}
-            </div>
-            <div style={{ marginBottom: '1rem' }}>
-              <strong>Role:</strong> {user?.role}
-            </div>
-            {user?.organization && (
-              <div style={{ marginBottom: '1rem' }}>
-                <strong>Organization:</strong> {user.organization}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+              <div
+                style={{
+                  fontSize: '5rem',
+                  width: '120px',
+                  height: '120px',
+                  borderRadius: '50%',
+                  backgroundColor: currentAvatar.color + '20',
+                  border: `4px solid ${currentAvatar.color}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  animation: 'pulse 2s infinite'
+                }}
+              >
+                {currentAvatar.emoji}
               </div>
-            )}
+              <button
+                onClick={() => setShowAvatarSelector(true)}
+                className="btn btn-primary"
+                style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
+              >
+                Change Avatar
+              </button>
+            </div>
+
+            <div style={{ flex: 1, minWidth: '200px' }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <strong>Name:</strong> {user?.name}
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <strong>Email:</strong> {user?.email}
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <strong>Role:</strong>{' '}
+                <span className={`badge ${user?.role === 'ADMIN' ? 'badge-danger' : 'badge-info'}`}>
+                  {user?.role}
+                </span>
+              </div>
+              {user?.organization && (
+                <div style={{ marginBottom: '1rem' }}>
+                  <strong>Organization:</strong> {user.organization}
+                </div>
+              )}
+            </div>
           </div>
 
           <div style={{ marginTop: '2rem' }}>
@@ -107,6 +156,14 @@ const Profile = () => {
             </div>
           )}
         </div>
+
+        {showAvatarSelector && (
+          <AvatarSelector
+            currentAvatar={user?.avatar || 'avatar1'}
+            onSelect={handleAvatarSelect}
+            onClose={() => setShowAvatarSelector(false)}
+          />
+        )}
       </div>
     </div>
   );

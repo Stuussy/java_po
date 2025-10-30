@@ -15,4 +15,9 @@ export const authAPI = {
     const response = await axios.get('/auth/me');
     return response.data;
   },
+
+  updateAvatar: async (avatar) => {
+    const response = await axios.put('/auth/update-avatar', { avatar });
+    return response.data;
+  },
 };

@@ -37,6 +37,7 @@ public class AuthService {
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
                 .role(User.UserRole.USER)
                 .organization(request.getOrganization())
+                .avatar("avatar1")
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -51,6 +52,7 @@ public class AuthService {
                 .name(user.getName())
                 .role(user.getRole().name())
                 .userId(user.getId())
+                .avatar(user.getAvatar())
                 .build();
     }
 
@@ -71,6 +73,7 @@ public class AuthService {
                 .name(user.getName())
                 .role(user.getRole().name())
                 .userId(user.getId())
+                .avatar(user.getAvatar())
                 .build();
     }
 }

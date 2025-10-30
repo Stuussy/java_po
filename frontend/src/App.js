@@ -40,15 +40,8 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
 
-              {/* Protected User Routes */}
-              <Route
-                path="/tests"
-                element={
-                  <PrivateRoute>
-                    <Tests />
-                  </PrivateRoute>
-                }
-              />
+              {/* Public and Protected User Routes */}
+              <Route path="/tests" element={<Tests />} />
               <Route
                 path="/test/:id/start"
                 element={

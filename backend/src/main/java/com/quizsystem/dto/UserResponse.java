@@ -18,5 +18,6 @@ public class UserResponse {
     private String name;
     private String role;
     private String organization;
+    private String avatar;
     private LocalDateTime createdAt;
 }

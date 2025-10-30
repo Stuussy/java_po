@@ -31,6 +31,10 @@ public class Test {
 
     private List<String> tags;
 
+    private String category;
+
+    private DifficultyLevel difficulty;
+
     private Boolean published;
 
     private List<Question> questions;
@@ -69,5 +73,11 @@ public class Test {
         TRUEFALSE,
         OPEN,
         NUMERIC
+    }
+
+    public enum DifficultyLevel {
+        BEGINNER,
+        INTERMEDIATE,
+        ADVANCED
     }
 }

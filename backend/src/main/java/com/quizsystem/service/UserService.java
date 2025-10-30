@@ -45,6 +45,14 @@ public class UserService {
         return mapToResponse(user);
     }
 
+    public UserResponse updateAvatar(String email, String avatar) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setAvatar(avatar);
+        user = userRepository.save(user);
+        return mapToResponse(user);
+    }
+
     private UserResponse mapToResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
@@ -52,6 +60,7 @@ public class UserService {
                 .name(user.getName())
                 .role(user.getRole().name())
                 .organization(user.getOrganization())
+                .avatar(user.getAvatar())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

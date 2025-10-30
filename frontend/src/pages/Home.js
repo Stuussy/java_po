@@ -30,16 +30,16 @@ const Home = () => {
   return (
     <div className="main-content">
       <div className="container">
-        <div className="card" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>
-            Welcome to Online Quiz System
-          </h1>
-          <p style={{ fontSize: '1.25rem', color: '#7f8c8d' }}>
+        <div className="hero-banner">
+          <h1>Welcome to Online Quiz System</h1>
+          <p>
             Test your knowledge with our interactive quizzes and get instant results!
           </p>
         </div>
 
-        <h2 style={{ marginBottom: '1.5rem' }}>Available Tests</h2>
+        <h2 style={{ marginBottom: '1.5rem', color: 'white', textAlign: 'center', fontSize: '2rem' }}>
+          🎯 Available Tests
+        </h2>
 
         {tests.length === 0 ? (
           <div className="card">

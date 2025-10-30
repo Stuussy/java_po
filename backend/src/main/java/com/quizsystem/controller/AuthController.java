@@ -35,4 +35,11 @@ public class AuthController {
         String email = authentication.getName();
         return ResponseEntity.ok(userService.getUserByEmail(email));
     }
+
+    @PutMapping("/update-avatar")
+    public ResponseEntity<UserResponse> updateAvatar(@RequestBody java.util.Map<String, String> request, Authentication authentication) {
+        String email = authentication.getName();
+        String avatar = request.get("avatar");
+        return ResponseEntity.ok(userService.updateAvatar(email, avatar));
+    }
 }

@@ -32,6 +32,8 @@ public class User {
 
     private String organization;
 
+    private String avatar;
+
     @CreatedDate
     private LocalDateTime createdAt;
 

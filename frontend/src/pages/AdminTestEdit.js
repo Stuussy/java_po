@@ -136,10 +136,10 @@ const AdminTestEdit = () => {
   };
 
   const handleSave = async (shouldPublish) => {
-    // Explicitly set published status based on button clicked
+    
     const testData = {
       ...test,
-      published: shouldPublish === true  // Force boolean true/false
+      published: shouldPublish === true  
     };
 
     try {
@@ -277,7 +277,7 @@ const AdminTestEdit = () => {
           </div>
 
           {test.questions.map((question, qIndex) => {
-            const isExpanded = expandedQuestions[qIndex] !== false; // Default to expanded
+            const isExpanded = expandedQuestions[qIndex] !== false; 
             return (
               <div key={question.id} className="card" style={{
                 background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%)',

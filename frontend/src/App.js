@@ -6,13 +6,13 @@ import PrivateRoute from './components/layout/PrivateRoute';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 
-// Public Pages
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 
-// User Pages
+
 import Tests from './pages/Tests';
 import TestStart from './pages/TestStart';
 import TestAttempt from './pages/TestAttempt';
@@ -20,7 +20,7 @@ import Result from './pages/Result';
 import Review from './pages/Review';
 import Profile from './pages/Profile';
 
-// Admin Pages
+
 import AdminDashboard from './pages/AdminDashboard';
 import AdminTests from './pages/AdminTests';
 import AdminTestEdit from './pages/AdminTestEdit';
@@ -36,13 +36,13 @@ function App() {
             <Header />
             <div style={{ flex: 1 }}>
             <Routes>
-              {/* Public Routes */}
+              {}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
 
-              {/* Public and Protected User Routes */}
+              {}
               <Route path="/tests" element={<Tests />} />
               <Route
                 path="/test/:id/start"
@@ -85,7 +85,7 @@ function App() {
                 }
               />
 
-              {/* Protected Admin Routes */}
+              {}
               <Route
                 path="/admin"
                 element={
@@ -135,7 +135,7 @@ function App() {
                 }
               />
 
-              {/* 404 Route */}
+              {}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </div>

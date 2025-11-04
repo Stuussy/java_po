@@ -21,25 +21,16 @@ const AdminUsers = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) {
-      return;
-    }
-
     try {
       await adminAPI.deleteUser(id);
       setUsers(users.filter((user) => user.id !== id));
     } catch (error) {
       console.error('Error deleting user:', error);
-      alert('Failed to delete user');
     }
   };
 
   const handleRoleChange = async (id, currentRole) => {
     const newRole = currentRole === 'USER' ? 'ADMIN' : 'USER';
-
-    if (!window.confirm(`Change role to ${newRole}?`)) {
-      return;
-    }
 
     try {
       await adminAPI.updateUserRole(id, newRole);
@@ -49,7 +40,6 @@ const AdminUsers = () => {
       setUsers(updatedUsers);
     } catch (error) {
       console.error('Error updating role:', error);
-      alert('Failed to update role');
     }
   };
 

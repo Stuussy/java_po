@@ -37,7 +37,6 @@ const Profile = () => {
       setShowAvatarSelector(false);
     } catch (error) {
       console.error('Error updating avatar:', error);
-      alert('Failed to update avatar');
     }
   };
 

@@ -77,10 +77,6 @@ const TestAttempt = () => {
   };
 
   const handleSubmit = async () => {
-    if (!window.confirm(t('testAttempt.submitConfirm'))) {
-      return;
-    }
-
     await saveCurrentAnswer();
 
     try {
@@ -88,12 +84,10 @@ const TestAttempt = () => {
       navigate(`/result/${attemptId}`);
     } catch (error) {
       console.error('Error submitting test:', error);
-      alert(t('testAttempt.submitFailed'));
     }
   };
 
   const handleTimeUp = useCallback(async () => {
-    alert(t('testAttempt.timeUp'));
     await saveCurrentAnswer();
     try {
       await testsAPI.submitTest(testId, attemptId);

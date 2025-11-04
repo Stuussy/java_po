@@ -24,16 +24,11 @@ const AdminTests = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('admin.tests.deleteConfirm'))) {
-      return;
-    }
-
     try {
       await adminAPI.deleteTest(id);
       setTests(tests.filter((test) => test.id !== id));
     } catch (error) {
       console.error('Error deleting test:', error);
-      alert(t('admin.tests.deleteFailed'));
     }
   };
 

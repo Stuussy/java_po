@@ -31,7 +31,6 @@ const TestStart = () => {
       navigate(`/test/${id}/attempt/${attempt.id}`);
     } catch (error) {
       console.error('Error starting test:', error);
-      alert(t('testStart.failedToStart'));
     }
   };
 

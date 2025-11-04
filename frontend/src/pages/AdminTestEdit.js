@@ -151,7 +151,6 @@ const AdminTestEdit = () => {
       navigate('/admin/tests');
     } catch (error) {
       console.error('Error saving test:', error);
-      alert(t('admin.testEdit.saveFailed') || 'Failed to save test');
     }
   };
 

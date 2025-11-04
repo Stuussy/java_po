@@ -1,0 +1,93 @@
+{
+  "header": {
+    "title": "Онлайн Тест Жүйесі",
+    "home": "Басты бет",
+    "tests": "Тесттер",
+    "profile": "Профиль",
+    "admin": "Әкімші",
+    "login": "Кіру",
+    "register": "Тіркелу",
+    "logout": "Шығу"
+  },
+  "home": {
+    "welcome": "Онлайн Тест Жүйесіне Қош Келдіңіз",
+    "description": "Біздің интерактивті тесттермен білімді тексеріңіз және лезде нәтиже алыңыз!"
+  },
+  "tests": {
+    "title": "Қолжетімді Тесттер",
+    "filters": "Сүзгілер мен Іздеу",
+    "search": "Атауы немесе сипаттамасы бойынша іздеу...",
+    "category": "Санат",
+    "allCategories": "Барлық Санаттар",
+    "difficulty": "Қиындық",
+    "allLevels": "Барлық Деңгейлер",
+    "sortBy": "Сұрыптау",
+    "sortTitle": "Атауы (А-Я)",
+    "sortDuration": "Ұзақтығы",
+    "sortQuestions": "Сұрақтар Саны",
+    "sortDifficulty": "Қиындық Деңгейі",
+    "showing": "Көрсетілген",
+    "of": "ішінен",
+    "test": "тест",
+    "tests_plural": "тесттер",
+    "noTests": "Сүзгілерге сәйкес тесттер табылмады. Іздеу критерийлерін өзгертіп көріңіз.",
+    "duration": "Ұзақтығы",
+    "questions": "Сұрақтар",
+    "passing": "Өту",
+    "minutes": "мин",
+    "startTest": "Тестті Бастау"
+  },
+  "difficulty": {
+    "BEGINNER": "Бастауыш",
+    "INTERMEDIATE": "Орта",
+    "ADVANCED": "Жоғары"
+  },
+  "login": {
+    "title": "Кіру",
+    "email": "Email",
+    "password": "Құпия сөз",
+    "submit": "Кіру",
+    "noAccount": "Аккаунт жоқ па?",
+    "registerLink": "Тіркелу",
+    "error": "Қате деректер"
+  },
+  "register": {
+    "title": "Тіркелу",
+    "name": "Толық Аты",
+    "email": "Email",
+    "password": "Құпия сөз",
+    "organization": "Ұйым (міндетті емес)",
+    "submit": "Тіркелу",
+    "hasAccount": "Аккаунт бар ма?",
+    "loginLink": "Кіру"
+  },
+  "profile": {
+    "title": "Менің Профилім",
+    "changeAvatar": "Аватарды Өзгерту",
+    "name": "Аты",
+    "email": "Email",
+    "role": "Рөл",
+    "organization": "Ұйым",
+    "testHistory": "Тесттер Тарихы",
+    "date": "Күні",
+    "testId": "Тест ID",
+    "score": "Баға",
+    "status": "Статус",
+    "actions": "Әрекеттер",
+    "viewResult": "Нәтижені Көру",
+    "noAttempts": "Әзірге әрекеттер жоқ."
+  },
+  "common": {
+    "loading": "Жүктеу...",
+    "error": "Қате",
+    "success": "Сәтті",
+    "cancel": "Болдырмау",
+    "save": "Сақтау",
+    "delete": "Жою",
+    "edit": "Өңдеу",
+    "back": "Артқа",
+    "next": "Келесі",
+    "previous": "Алдыңғы",
+    "submit": "Жіберу"
+  }
+}

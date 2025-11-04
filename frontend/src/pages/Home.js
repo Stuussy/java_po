@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { testsAPI } from '../api/tests';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Home = () => {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadTests();
@@ -24,21 +26,19 @@ const Home = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
         <div className="hero-banner">
-          <h1>Welcome to Online Quiz System</h1>
-          <p>
-            Test your knowledge with our interactive quizzes and get instant results!
-          </p>
+          <h1>{t('home.welcome')}</h1>
+          <p>{t('home.description')}</p>
         </div>
 
-        <h2 style={{ marginBottom: '1.5rem', color: 'white', textAlign: 'center', fontSize: '2rem' }}>
-          🎯 Available Tests
+        <h2 style={{ marginBottom: '1.5rem', textAlign: 'center', fontSize: '2rem' }}>
+          🎯 {t('tests.title')}
         </h2>
 
         {tests.length === 0 ? (
@@ -53,23 +53,23 @@ const Home = () => {
                 <p className="card-description">{test.description}</p>
                 <div style={{ marginBottom: '1rem' }}>
                   <span style={{ marginRight: '1rem' }}>
-                    <strong>Duration:</strong> {test.durationMinutes} min
+                    <strong>{t('tests.duration')}:</strong> {test.durationMinutes} {t('tests.minutes')}
                   </span>
                   <span>
-                    <strong>Passing Score:</strong> {test.passingScore}%
+                    <strong>{t('tests.passing')}:</strong> {test.passingScore}%
                   </span>
                 </div>
                 <div style={{ marginBottom: '1rem' }}>
-                  <strong>Questions:</strong> {test.questions?.length || 0}
+                  <strong>{t('tests.questions')}:</strong> {test.questions?.length || 0}
                 </div>
                 {user ? (
                   <Link to={`/test/${test.id}/start`} className="btn btn-primary">
-                    Start Test
+                    {t('tests.startTest')}
                   </Link>
                 ) : (
                   <div>
                     <Link to="/login" className="btn btn-primary">
-                      Login to Start Test
+                      {t('header.login')}
                     </Link>
                   </div>
                 )}

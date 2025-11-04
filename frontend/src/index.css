@@ -5,22 +5,22 @@
 }
 
 :root {
-  /* Soft Modern Color Palette */
-  --primary: #7c3aed;
-  --primary-dark: #6d28d9;
-  --primary-light: #a78bfa;
-  --secondary: #3b82f6;
-  --accent: #f472b6;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --danger: #f87171;
-  --info: #60a5fa;
+  /* Pleasant Eye-Friendly Color Palette */
+  --primary: #0ea5e9;
+  --primary-dark: #0284c7;
+  --primary-light: #7dd3fc;
+  --secondary: #06b6d4;
+  --accent: #14b8a6;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #f43f5e;
+  --info: #3b82f6;
 
   /* Soft Neutrals - Better Readability */
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-tertiary: #e2e8f0;
-  --text-primary: #1e293b;
+  --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #64748b;
   --text-light: #94a3b8;
@@ -47,7 +47,7 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(135deg, #e0e7ff 0%, #fce7f3 50%, #ddd6fe 100%);
+  background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 50%, #f0fdfa 100%);
   background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
@@ -111,10 +111,10 @@ body {
 
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 5px rgba(124, 58, 237, 0.3), 0 0 10px rgba(124, 58, 237, 0.2);
+    box-shadow: 0 0 5px rgba(14, 165, 233, 0.3), 0 0 10px rgba(14, 165, 233, 0.2);
   }
   50% {
-    box-shadow: 0 0 15px rgba(124, 58, 237, 0.5), 0 0 25px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 0 15px rgba(14, 165, 233, 0.5), 0 0 25px rgba(14, 165, 233, 0.3);
   }
 }
 
@@ -868,13 +868,13 @@ body::after {
 body::before {
   top: 10%;
   left: 10%;
-  background: rgba(168, 139, 250, 0.3);
+  background: rgba(125, 211, 252, 0.3);
 }
 
 body::after {
   bottom: 10%;
   right: 10%;
-  background: rgba(244, 114, 182, 0.3);
+  background: rgba(20, 184, 166, 0.3);
   animation-delay: 4s;
 }
 
@@ -1076,9 +1076,9 @@ body::after {
 /* Neon glow effect */
 .neon {
   text-shadow:
-    0 0 5px rgba(124, 58, 237, 0.5),
-    0 0 10px rgba(124, 58, 237, 0.3),
-    0 0 20px rgba(124, 58, 237, 0.2);
+    0 0 5px rgba(14, 165, 233, 0.5),
+    0 0 10px rgba(14, 165, 233, 0.3),
+    0 0 20px rgba(14, 165, 233, 0.2);
   animation: glow 2s ease-in-out infinite;
 }
 

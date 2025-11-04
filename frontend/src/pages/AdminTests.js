@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminAPI } from '../api/admin';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AdminTests = () => {
+  const { t } = useLanguage();
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +24,7 @@ const AdminTests = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this test?')) {
+    if (!window.confirm(t('admin.tests.deleteConfirm'))) {
       return;
     }
 
@@ -31,39 +33,39 @@ const AdminTests = () => {
       setTests(tests.filter((test) => test.id !== id));
     } catch (error) {
       console.error('Error deleting test:', error);
-      alert('Failed to delete test');
+      alert(t('admin.tests.deleteFailed'));
     }
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h1>Manage Tests</h1>
+          <h1>{t('admin.tests.title')}</h1>
           <Link to="/admin/tests/new" className="btn btn-success">
-            Create New Test
+            {t('admin.tests.createNew')}
           </Link>
         </div>
 
         {tests.length === 0 ? (
           <div className="card">
-            <p>No tests found. Create your first test!</p>
+            <p>{t('admin.tests.noTests')}</p>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table className="table">
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Questions</th>
-                  <th>Duration</th>
-                  <th>Status</th>
-                  <th>Created</th>
-                  <th>Actions</th>
+                  <th>{t('admin.tests.tableTitle')}</th>
+                  <th>{t('admin.tests.tableQuestions')}</th>
+                  <th>{t('admin.tests.tableDuration')}</th>
+                  <th>{t('admin.tests.tableStatus')}</th>
+                  <th>{t('admin.tests.tableCreated')}</th>
+                  <th>{t('admin.tests.tableActions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -74,17 +76,17 @@ const AdminTests = () => {
                     <td>{test.durationMinutes} min</td>
                     <td>
                       <span className={`badge ${test.published ? 'badge-success' : 'badge-info'}`}>
-                        {test.published ? 'Published' : 'Draft'}
+                        {test.published ? t('admin.tests.statusPublished') : t('admin.tests.statusDraft')}
                       </span>
                     </td>
                     <td>{new Date(test.createdAt).toLocaleDateString()}</td>
                     <td>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <Link to={`/admin/tests/${test.id}/edit`} className="btn btn-primary" style={{ padding: '0.25rem 0.75rem' }}>
-                          Edit
+                          {t('admin.tests.edit')}
                         </Link>
                         <button onClick={() => handleDelete(test.id)} className="btn btn-danger" style={{ padding: '0.25rem 0.75rem' }}>
-                          Delete
+                          {t('admin.tests.delete')}
                         </button>
                       </div>
                     </td>

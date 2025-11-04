@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { testsAPI } from '../api/tests';
+import { useLanguage } from '../contexts/LanguageContext';
 import Timer from '../components/tests/Timer';
 
 const TestAttempt = () => {
   const { id: testId, attemptId } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [test, setTest] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -75,7 +77,7 @@ const TestAttempt = () => {
   };
 
   const handleSubmit = async () => {
-    if (!window.confirm('Are you sure you want to submit the test?')) {
+    if (!window.confirm(t('testAttempt.submitConfirm'))) {
       return;
     }
 
@@ -86,12 +88,12 @@ const TestAttempt = () => {
       navigate(`/result/${attemptId}`);
     } catch (error) {
       console.error('Error submitting test:', error);
-      alert('Failed to submit test');
+      alert(t('testAttempt.submitFailed'));
     }
   };
 
   const handleTimeUp = useCallback(async () => {
-    alert('Time is up! Submitting your test...');
+    alert(t('testAttempt.timeUp'));
     await saveCurrentAnswer();
     try {
       await testsAPI.submitTest(testId, attemptId);
@@ -99,14 +101,14 @@ const TestAttempt = () => {
     } catch (error) {
       console.error('Error submitting test:', error);
     }
-  }, [testId, attemptId, navigate]);
+  }, [testId, attemptId, navigate, t]);
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   if (!test || !test.questions || test.questions.length === 0) {
-    return <div className="container">Test not found</div>;
+    return <div className="container">{t('testAttempt.notFound')}</div>;
   }
 
   const currentQuestion = test.questions[currentQuestionIndex];
@@ -119,13 +121,13 @@ const TestAttempt = () => {
       <div className="container">
         <div className="card">
           <div style={{ marginBottom: '1rem', color: '#7f8c8d' }}>
-            Question {currentQuestionIndex + 1} of {test.questions.length}
+            {t('testAttempt.questionOf').replace('{current}', currentQuestionIndex + 1).replace('{total}', test.questions.length)}
           </div>
 
           <h2 className="question-text">{currentQuestion.text}</h2>
 
           <div style={{ marginTop: '2rem' }}>
-            {renderQuestion(currentQuestion, currentAnswer, handleAnswerChange)}
+            {renderQuestion(currentQuestion, currentAnswer, handleAnswerChange, t)}
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem', gap: '1rem' }}>
@@ -134,17 +136,17 @@ const TestAttempt = () => {
               disabled={currentQuestionIndex === 0}
               className="btn btn-secondary"
             >
-              Previous
+              {t('testAttempt.previous')}
             </button>
 
             <div style={{ display: 'flex', gap: '1rem' }}>
               {currentQuestionIndex === test.questions.length - 1 ? (
                 <button onClick={handleSubmit} className="btn btn-success">
-                  Submit Test
+                  {t('testAttempt.submitTest')}
                 </button>
               ) : (
                 <button onClick={handleNext} className="btn btn-primary">
-                  Next
+                  {t('testAttempt.next')}
                 </button>
               )}
             </div>
@@ -152,7 +154,7 @@ const TestAttempt = () => {
         </div>
 
         <div className="card" style={{ marginTop: '1rem' }}>
-          <h3 style={{ marginBottom: '1rem' }}>Question Navigation</h3>
+          <h3 style={{ marginBottom: '1rem' }}>{t('testAttempt.questionNavigation')}</h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
             {test.questions.map((q, index) => (
               <button
@@ -178,7 +180,7 @@ const TestAttempt = () => {
   );
 };
 
-const renderQuestion = (question, answer, handleAnswerChange) => {
+const renderQuestion = (question, answer, handleAnswerChange, t) => {
   switch (question.type) {
     case 'SINGLE':
       return (
@@ -246,7 +248,7 @@ const renderQuestion = (question, answer, handleAnswerChange) => {
           rows="5"
           value={answer.textAnswer || ''}
           onChange={(e) => handleAnswerChange(question.id, { textAnswer: e.target.value })}
-          placeholder="Type your answer here..."
+          placeholder={t('testAttempt.openPlaceholder')}
         />
       );
 
@@ -257,12 +259,12 @@ const renderQuestion = (question, answer, handleAnswerChange) => {
           className="form-control"
           value={answer.numericAnswer || ''}
           onChange={(e) => handleAnswerChange(question.id, { numericAnswer: e.target.value })}
-          placeholder="Enter a number..."
+          placeholder={t('testAttempt.numericPlaceholder')}
         />
       );
 
     default:
-      return <div>Unknown question type</div>;
+      return <div>{t('testAttempt.unknownType')}</div>;
   }
 };
 

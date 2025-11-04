@@ -135,8 +135,12 @@ const AdminTestEdit = () => {
     setTest({ ...test, questions });
   };
 
-  const handleSave = async (publish = false) => {
-    const testData = { ...test, published: publish };
+  const handleSave = async (shouldPublish) => {
+    // Explicitly set published status based on button clicked
+    const testData = {
+      ...test,
+      published: shouldPublish === true  // Force boolean true/false
+    };
 
     try {
       if (isEdit) {
@@ -147,24 +151,24 @@ const AdminTestEdit = () => {
       navigate('/admin/tests');
     } catch (error) {
       console.error('Error saving test:', error);
-      alert('Failed to save test');
+      alert(t('admin.testEdit.saveFailed') || 'Failed to save test');
     }
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
-        <h1 className="card-title">{isEdit ? 'Edit Test' : 'Create New Test'}</h1>
+        <h1 className="card-title">{isEdit ? t('admin.testEdit.titleEdit') : t('admin.testEdit.titleCreate')}</h1>
 
         <div className="card">
-          <h2>Test Information</h2>
+          <h2>{t('admin.testEdit.testInfo')}</h2>
 
           <div className="form-group">
-            <label className="form-label">Title</label>
+            <label className="form-label">{t('admin.testEdit.title')}</label>
             <input
               type="text"
               name="title"
@@ -176,7 +180,7 @@ const AdminTestEdit = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Description</label>
+            <label className="form-label">{t('admin.testEdit.description')}</label>
             <textarea
               name="description"
               className="form-control"
@@ -188,35 +192,35 @@ const AdminTestEdit = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Category</label>
+              <label className="form-label">{t('admin.testEdit.category')}</label>
               <input
                 type="text"
                 name="category"
                 className="form-control"
                 value={test.category}
                 onChange={handleChange}
-                placeholder="e.g., Programming, Mathematics"
+                placeholder={t('admin.testEdit.categoryPlaceholder')}
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Difficulty Level</label>
+              <label className="form-label">{t('admin.testEdit.difficulty')}</label>
               <select
                 name="difficulty"
                 className="form-control"
                 value={test.difficulty}
                 onChange={handleChange}
               >
-                <option value="BEGINNER">Beginner</option>
-                <option value="INTERMEDIATE">Intermediate</option>
-                <option value="ADVANCED">Advanced</option>
+                <option value="BEGINNER">{t('difficulty.BEGINNER')}</option>
+                <option value="INTERMEDIATE">{t('difficulty.INTERMEDIATE')}</option>
+                <option value="ADVANCED">{t('difficulty.ADVANCED')}</option>
               </select>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
-              <label className="form-label">Duration (minutes)</label>
+              <label className="form-label">{t('admin.testEdit.duration')}</label>
               <input
                 type="number"
                 name="durationMinutes"
@@ -228,7 +232,7 @@ const AdminTestEdit = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Passing Score (%)</label>
+              <label className="form-label">{t('admin.testEdit.passingScore')}</label>
               <input
                 type="number"
                 name="passingScore"
@@ -242,13 +246,13 @@ const AdminTestEdit = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Tags (comma separated)</label>
+            <label className="form-label">{t('admin.testEdit.tags')}</label>
             <input
               type="text"
               className="form-control"
               value={test.tags.join(', ')}
               onChange={handleTagsChange}
-              placeholder="JavaScript, React, Advanced"
+              placeholder={t('admin.testEdit.tagsPlaceholder')}
             />
           </div>
 
@@ -260,16 +264,16 @@ const AdminTestEdit = () => {
                 checked={test.published}
                 onChange={handleChange}
               />
-              {' '}Published
+              {' '}{t('admin.testEdit.published')}
             </label>
           </div>
         </div>
 
         <div className="card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h2>Questions</h2>
+            <h2>{t('admin.testEdit.questions')}</h2>
             <button onClick={addQuestion} className="btn btn-success">
-              Add Question
+              {t('admin.testEdit.addQuestion')}
             </button>
           </div>
 
@@ -293,7 +297,7 @@ const AdminTestEdit = () => {
                 }} onClick={() => toggleQuestionExpand(qIndex)}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <span style={{ fontSize: '1.5rem' }}>{isExpanded ? '▼' : '▶'}</span>
-                    <h3 style={{ margin: 0 }}>Question {qIndex + 1}</h3>
+                    <h3 style={{ margin: 0 }}>{t('admin.testEdit.question')} {qIndex + 1}</h3>
                     {!isExpanded && question.text && (
                       <span style={{
                         color: '#64748b',
@@ -330,16 +334,16 @@ const AdminTestEdit = () => {
                       onClick={() => duplicateQuestion(qIndex)}
                       className="btn btn-info"
                       style={{ padding: '0.25rem 0.75rem', fontSize: '0.9rem' }}
-                      title="Duplicate Question"
+                      title={t('admin.testEdit.duplicate')}
                     >
-                      📋 Duplicate
+                      📋 {t('admin.testEdit.duplicate')}
                     </button>
                     <button
                       onClick={() => deleteQuestion(qIndex)}
                       className="btn btn-danger"
                       style={{ padding: '0.25rem 0.75rem', fontSize: '0.9rem' }}
                     >
-                      🗑 Delete
+                      🗑 {t('admin.testEdit.delete')}
                     </button>
                   </div>
                 </div>
@@ -348,22 +352,22 @@ const AdminTestEdit = () => {
                   <div style={{ padding: '0 0.5rem' }}>
 
               <div className="form-group">
-                <label className="form-label">Question Type</label>
+                <label className="form-label">{t('admin.testEdit.questionType')}</label>
                 <select
                   className="form-control"
                   value={question.type}
                   onChange={(e) => updateQuestion(qIndex, 'type', e.target.value)}
                 >
-                  <option value="SINGLE">Single Choice</option>
-                  <option value="MULTIPLE">Multiple Choice</option>
-                  <option value="TRUEFALSE">True/False</option>
-                  <option value="OPEN">Open Ended</option>
-                  <option value="NUMERIC">Numeric</option>
+                  <option value="SINGLE">{t('admin.testEdit.singleChoice')}</option>
+                  <option value="MULTIPLE">{t('admin.testEdit.multipleChoice')}</option>
+                  <option value="TRUEFALSE">{t('admin.testEdit.trueFalse')}</option>
+                  <option value="OPEN">{t('admin.testEdit.openEnded')}</option>
+                  <option value="NUMERIC">{t('admin.testEdit.numeric')}</option>
                 </select>
               </div>
 
               <div className="form-group">
-                <label className="form-label">Question Text</label>
+                <label className="form-label">{t('admin.testEdit.questionText')}</label>
                 <textarea
                   className="form-control"
                   rows="2"
@@ -373,7 +377,7 @@ const AdminTestEdit = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Points</label>
+                <label className="form-label">{t('admin.testEdit.points')}</label>
                 <input
                   type="number"
                   className="form-control"
@@ -386,10 +390,10 @@ const AdminTestEdit = () => {
               {(question.type === 'SINGLE' || question.type === 'MULTIPLE' || question.type === 'TRUEFALSE') && (
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <label className="form-label">Choices</label>
+                    <label className="form-label">{t('admin.testEdit.choices')}</label>
                     {question.type !== 'TRUEFALSE' && (
                       <button onClick={() => addChoice(qIndex)} className="btn btn-primary" style={{ padding: '0.25rem 0.75rem' }}>
-                        Add Choice
+                        {t('admin.testEdit.addChoice')}
                       </button>
                     )}
                   </div>
@@ -417,7 +421,7 @@ const AdminTestEdit = () => {
                         className="form-control"
                         value={choice.text}
                         onChange={(e) => updateChoice(qIndex, cIndex, 'text', e.target.value)}
-                        placeholder="Choice text"
+                        placeholder={t('admin.testEdit.choicePlaceholder')}
                         style={{ flex: 1 }}
                       />
                       {question.type !== 'TRUEFALSE' && (
@@ -436,13 +440,13 @@ const AdminTestEdit = () => {
 
               {(question.type === 'OPEN' || question.type === 'NUMERIC') && (
                 <div className="form-group">
-                  <label className="form-label">Correct Answer (for reference)</label>
+                  <label className="form-label">{t('admin.testEdit.correctAnswer')}</label>
                   <input
                     type="text"
                     className="form-control"
                     value={question.correctAnswer || ''}
                     onChange={(e) => updateQuestion(qIndex, 'correctAnswer', e.target.value)}
-                    placeholder="Enter the correct answer"
+                    placeholder={t('admin.testEdit.correctAnswerPlaceholder')}
                   />
                 </div>
               )}
@@ -456,13 +460,13 @@ const AdminTestEdit = () => {
         <div className="card">
           <div style={{ display: 'flex', gap: '1rem' }}>
             <button onClick={() => handleSave(false)} className="btn btn-secondary">
-              Save as Draft
+              {t('admin.testEdit.saveDraft')}
             </button>
             <button onClick={() => handleSave(true)} className="btn btn-success">
-              Publish Test
+              {t('admin.testEdit.publish')}
             </button>
             <button onClick={() => navigate('/admin/tests')} className="btn btn-secondary">
-              Cancel
+              {t('admin.testEdit.cancel')}
             </button>
           </div>
         </div>

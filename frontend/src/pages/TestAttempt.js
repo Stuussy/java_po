@@ -20,7 +20,7 @@ const TestAttempt = () => {
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
       saveCurrentAnswer();
-    }, 30000); // Auto-save every 30 seconds
+    }, 30000); 
 
     return () => clearInterval(autoSaveInterval);
   }, [answers, currentQuestionIndex]);

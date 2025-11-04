@@ -1,7 +1,7 @@
 import axios from './axios';
 
 export const adminAPI = {
-  // Tests
+  
   getAllTests: async () => {
     const response = await axios.get('/admin/tests');
     return response.data;
@@ -21,7 +21,7 @@ export const adminAPI = {
     await axios.delete(`/admin/tests/${id}`);
   },
 
-  // Users
+  
   getAllUsers: async () => {
     const response = await axios.get('/admin/users');
     return response.data;
@@ -36,7 +36,7 @@ export const adminAPI = {
     return response.data;
   },
 
-  // Reports
+  
   getTestReport: async (testId) => {
     const response = await axios.get(`/admin/reports/test/${testId}`);
     return response.data;

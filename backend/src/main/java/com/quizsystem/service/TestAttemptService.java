@@ -41,10 +41,10 @@ public class TestAttemptService {
             throw new RuntimeException("Cannot modify submitted attempt");
         }
 
-        // Remove existing answer for this question if present
+        
         attempt.getAnswers().removeIf(a -> a.getQuestionId().equals(answerRequest.getQuestionId()));
 
-        // Add new answer
+        
         TestAttempt.Answer answer = TestAttempt.Answer.builder()
                 .questionId(answerRequest.getQuestionId())
                 .selectedChoices(answerRequest.getSelectedChoices())
@@ -68,7 +68,7 @@ public class TestAttemptService {
         attempt.setSubmittedAt(LocalDateTime.now());
         attempt.setStatus(TestAttempt.AttemptStatus.SUBMITTED);
 
-        // Auto-grade the attempt
+        
         gradeAttempt(attempt);
 
         return attemptRepository.save(attempt);
@@ -138,7 +138,7 @@ public class TestAttemptService {
                 return answer.getNumericAnswer().trim().equals(question.getCorrectAnswer().trim());
 
             case OPEN:
-                // Open-ended questions need manual grading
+                
                 return false;
 
             default:

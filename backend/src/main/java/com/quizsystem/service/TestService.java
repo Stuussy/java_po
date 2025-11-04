@@ -33,7 +33,7 @@ public class TestService {
         test.setCreatedAt(LocalDateTime.now());
         test.setPublished(false);
 
-        // Assign unique IDs to questions and choices
+        
         if (test.getQuestions() != null) {
             test.getQuestions().forEach(question -> {
                 if (question.getId() == null) {
@@ -63,7 +63,7 @@ public class TestService {
         existingTest.setPublished(test.getPublished());
         existingTest.setQuestions(test.getQuestions());
 
-        // Assign IDs to new questions/choices if needed
+        
         if (existingTest.getQuestions() != null) {
             existingTest.getQuestions().forEach(question -> {
                 if (question.getId() == null) {

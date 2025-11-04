@@ -29,7 +29,7 @@ public class AdminController {
     private final TestAttemptService attemptService;
     private final UserRepository userRepository;
 
-    // Test management
+    
     @GetMapping("/tests")
     public ResponseEntity<List<Test>> getAllTests() {
         return ResponseEntity.ok(testService.getAllTests());
@@ -53,7 +53,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // User management
+    
     @GetMapping("/users")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
@@ -73,7 +73,7 @@ public class AdminController {
         return ResponseEntity.ok(userService.updateUserRole(id, role));
     }
 
-    // Reports and analytics
+    
     @GetMapping("/reports/test/{id}")
     public ResponseEntity<Map<String, Object>> getTestReport(@PathVariable String id) {
         Test test = testService.getTestById(id);

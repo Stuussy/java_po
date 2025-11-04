@@ -44,9 +44,9 @@ public class TestAttempt {
     @AllArgsConstructor
     public static class Answer {
         private String questionId;
-        private List<String> selectedChoices; // For single/multiple choice
-        private String textAnswer; // For open-ended
-        private String numericAnswer; // For numeric
+        private List<String> selectedChoices; 
+        private String textAnswer; 
+        private String numericAnswer; 
         private Boolean isCorrect;
         private Integer pointsAwarded;
     }

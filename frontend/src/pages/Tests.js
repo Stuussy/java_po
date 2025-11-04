@@ -36,7 +36,7 @@ const Tests = () => {
   const applyFilters = () => {
     let result = [...tests];
 
-    // Search filter
+    
     if (search.trim() !== '') {
       result = result.filter(test =>
         test.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -44,17 +44,17 @@ const Tests = () => {
       );
     }
 
-    // Category filter
+    
     if (selectedCategory !== 'all') {
       result = result.filter(test => test.category === selectedCategory);
     }
 
-    // Difficulty filter
+    
     if (selectedDifficulty !== 'all') {
       result = result.filter(test => test.difficulty === selectedDifficulty);
     }
 
-    // Sorting
+    
     result.sort((a, b) => {
       switch (sortBy) {
         case 'title':
@@ -101,7 +101,7 @@ const Tests = () => {
       <div className="container">
         <h1 style={{ marginBottom: '2rem' }}>{t('tests.title')}</h1>
 
-        {/* Filters Section */}
+        {}
         <div className="card" style={{ marginBottom: '2rem' }}>
           <h3 style={{ marginBottom: '1rem', fontSize: '1.2rem' }}>🔍 {t('tests.filters')}</h3>
 
@@ -117,7 +117,7 @@ const Tests = () => {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-            {/* Category Filter */}
+            {}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
                 📂 {t('tests.category')}
@@ -134,7 +134,7 @@ const Tests = () => {
               </select>
             </div>
 
-            {/* Difficulty Filter */}
+            {}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
                 ⭐ {t('tests.difficulty')}
@@ -151,7 +151,7 @@ const Tests = () => {
               </select>
             </div>
 
-            {/* Sort By */}
+            {}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
                 🔄 {t('tests.sortBy')}
@@ -169,7 +169,7 @@ const Tests = () => {
             </div>
           </div>
 
-          {/* Results count */}
+          {}
           <div style={{ marginTop: '1rem', color: 'var(--text-light)', fontSize: '0.9rem' }}>
             {t('tests.showing')} {filteredTests.length} {t('tests.of')} {tests.length} {tests.length !== 1 ? t('tests.tests_plural') : t('tests.test')}
           </div>

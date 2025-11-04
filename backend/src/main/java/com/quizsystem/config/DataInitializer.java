@@ -27,7 +27,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Create default admin user if not exists
+        
         if (!userRepository.existsByEmail("admin@quiz.com")) {
             User admin = User.builder()
                     .email("admin@quiz.com")
@@ -44,7 +44,7 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Password: admin123");
         }
 
-        // Create default test user if not exists
+        
         if (!userRepository.existsByEmail("user@quiz.com")) {
             User user = User.builder()
                     .email("user@quiz.com")
@@ -61,7 +61,7 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Password: user123");
         }
 
-        // Get admin user for test creation
+        
         User admin = userRepository.findByEmail("admin@quiz.com").orElse(null);
         if (admin != null) {
             createDefaultTests(admin.getId());
@@ -69,7 +69,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createDefaultTests(String adminId) {
-        // Check if tests already exist
+        
         if (testRepository.count() > 0) {
             log.info("Tests already exist, skipping creation");
             return;
@@ -77,19 +77,19 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info("Creating default tests...");
 
-        // Test 1: JavaScript Basics
+        
         createJavaScriptTest(adminId);
 
-        // Test 2: React Fundamentals
+        
         createReactTest(adminId);
 
-        // Test 3: Java Spring Boot
+        
         createSpringBootTest(adminId);
 
-        // Test 4: General Programming
+        
         createGeneralProgrammingTest(adminId);
 
-        // Test 5: Database & SQL
+        
         createDatabaseTest(adminId);
 
         log.info("Default tests created successfully!");
@@ -98,7 +98,7 @@ public class DataInitializer implements CommandLineRunner {
     private void createJavaScriptTest(String adminId) {
         List<Test.Question> questions = new ArrayList<>();
 
-        // Question 1
+        
         questions.add(Test.Question.builder()
                 .id(UUID.randomUUID().toString())
                 .type(Test.QuestionType.SINGLE)
@@ -112,7 +112,7 @@ public class DataInitializer implements CommandLineRunner {
                 ))
                 .build());
 
-        // Question 2
+        
         questions.add(Test.Question.builder()
                 .id(UUID.randomUUID().toString())
                 .type(Test.QuestionType.MULTIPLE)
@@ -126,7 +126,7 @@ public class DataInitializer implements CommandLineRunner {
                 ))
                 .build());
 
-        // Question 3
+        
         questions.add(Test.Question.builder()
                 .id(UUID.randomUUID().toString())
                 .type(Test.QuestionType.TRUEFALSE)
@@ -138,7 +138,7 @@ public class DataInitializer implements CommandLineRunner {
                 ))
                 .build());
 
-        // Question 4
+        
         questions.add(Test.Question.builder()
                 .id(UUID.randomUUID().toString())
                 .type(Test.QuestionType.SINGLE)
@@ -152,7 +152,7 @@ public class DataInitializer implements CommandLineRunner {
                 ))
                 .build());
 
-        // Question 5
+        
         questions.add(Test.Question.builder()
                 .id(UUID.randomUUID().toString())
                 .type(Test.QuestionType.NUMERIC)

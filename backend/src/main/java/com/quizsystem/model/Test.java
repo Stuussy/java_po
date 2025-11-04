@@ -54,7 +54,7 @@ public class Test {
         private String text;
         private List<Choice> choices;
         private Integer points;
-        private String correctAnswer; // For open-ended and numeric questions
+        private String correctAnswer; 
     }
 
     @Data

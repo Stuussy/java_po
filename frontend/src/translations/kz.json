@@ -161,6 +161,33 @@
       "publish": "Тестті Жариялау",
       "cancel": "Болдырмау",
       "saveFailed": "Тестті сақтау сәтсіз аяқталды"
+    },
+    "users": {
+      "title": "Пайдаланушыларды Басқару",
+      "noUsers": "Пайдаланушылар табылмады.",
+      "tableName": "Аты",
+      "tableEmail": "Email",
+      "tableRole": "Рөлі",
+      "tableOrganization": "Ұйым",
+      "tableRegistered": "Тіркелді",
+      "tableActions": "Әрекеттер",
+      "changeRole": "Рөлді Өзгерту",
+      "delete": "Жою"
+    },
+    "reports": {
+      "title": "Есептер және Аналитика",
+      "noTests": "Есептер үшін қолжетімді тесттер жоқ.",
+      "selectTest": "Тестті Таңдаңыз",
+      "totalAttempts": "Барлық Әрекеттер",
+      "averageScore": "Орташа Ұпай",
+      "passed": "Өткендер",
+      "passRate": "Өту Пайызы",
+      "recentAttempts": "Соңғы Әрекеттер",
+      "tableUserId": "Пайдаланушы ID",
+      "tableStarted": "Басталды",
+      "tableSubmitted": "Жіберілді",
+      "tableScore": "Ұпай",
+      "tableStatus": "Мәртебесі"
     }
   },
   "testStart": {

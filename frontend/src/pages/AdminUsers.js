@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { adminAPI } from '../api/admin';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AdminUsers = () => {
+  const { t } = useLanguage();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,29 +46,29 @@ const AdminUsers = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
-        <h1 style={{ marginBottom: '2rem' }}>Manage Users</h1>
+        <h1 style={{ marginBottom: '2rem' }}>{t('admin.users.title')}</h1>
 
         {users.length === 0 ? (
           <div className="card">
-            <p>No users found.</p>
+            <p>{t('admin.users.noUsers')}</p>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table className="table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Organization</th>
-                  <th>Registered</th>
-                  <th>Actions</th>
+                  <th>{t('admin.users.tableName')}</th>
+                  <th>{t('admin.users.tableEmail')}</th>
+                  <th>{t('admin.users.tableRole')}</th>
+                  <th>{t('admin.users.tableOrganization')}</th>
+                  <th>{t('admin.users.tableRegistered')}</th>
+                  <th>{t('admin.users.tableActions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -88,14 +90,14 @@ const AdminUsers = () => {
                           className="btn btn-primary"
                           style={{ padding: '0.25rem 0.75rem' }}
                         >
-                          Change Role
+                          {t('admin.users.changeRole')}
                         </button>
                         <button
                           onClick={() => handleDelete(user.id)}
                           className="btn btn-danger"
                           style={{ padding: '0.25rem 0.75rem' }}
                         >
-                          Delete
+                          {t('admin.users.delete')}
                         </button>
                       </div>
                     </td>

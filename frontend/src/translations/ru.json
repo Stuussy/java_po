@@ -161,6 +161,33 @@
       "publish": "Опубликовать Тест",
       "cancel": "Отмена",
       "saveFailed": "Не удалось сохранить тест"
+    },
+    "users": {
+      "title": "Управление Пользователями",
+      "noUsers": "Пользователи не найдены.",
+      "tableName": "Имя",
+      "tableEmail": "Email",
+      "tableRole": "Роль",
+      "tableOrganization": "Организация",
+      "tableRegistered": "Зарегистрирован",
+      "tableActions": "Действия",
+      "changeRole": "Изменить Роль",
+      "delete": "Удалить"
+    },
+    "reports": {
+      "title": "Отчеты и Аналитика",
+      "noTests": "Нет доступных тестов для отчетов.",
+      "selectTest": "Выберите Тест",
+      "totalAttempts": "Всего Попыток",
+      "averageScore": "Средний Балл",
+      "passed": "Пройдено",
+      "passRate": "Процент Прохождения",
+      "recentAttempts": "Последние Попытки",
+      "tableUserId": "ID Пользователя",
+      "tableStarted": "Начато",
+      "tableSubmitted": "Отправлено",
+      "tableScore": "Балл",
+      "tableStatus": "Статус"
     }
   },
   "testStart": {

@@ -161,6 +161,33 @@
       "publish": "Publish Test",
       "cancel": "Cancel",
       "saveFailed": "Failed to save test"
+    },
+    "users": {
+      "title": "Manage Users",
+      "noUsers": "No users found.",
+      "tableName": "Name",
+      "tableEmail": "Email",
+      "tableRole": "Role",
+      "tableOrganization": "Organization",
+      "tableRegistered": "Registered",
+      "tableActions": "Actions",
+      "changeRole": "Change Role",
+      "delete": "Delete"
+    },
+    "reports": {
+      "title": "Reports & Analytics",
+      "noTests": "No tests available for reporting.",
+      "selectTest": "Select Test",
+      "totalAttempts": "Total Attempts",
+      "averageScore": "Average Score",
+      "passed": "Passed",
+      "passRate": "Pass Rate",
+      "recentAttempts": "Recent Attempts",
+      "tableUserId": "User ID",
+      "tableStarted": "Started",
+      "tableSubmitted": "Submitted",
+      "tableScore": "Score",
+      "tableStatus": "Status"
     }
   },
   "testStart": {

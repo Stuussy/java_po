@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { adminAPI } from '../api/admin';
 import { testsAPI } from '../api/tests';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AdminTestEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const isEdit = !!id;
 
   const [test, setTest] = useState({
@@ -13,11 +15,14 @@ const AdminTestEdit = () => {
     description: '',
     durationMinutes: 30,
     passingScore: 70,
+    category: '',
+    difficulty: 'BEGINNER',
     tags: [],
     published: false,
     questions: [],
   });
   const [loading, setLoading] = useState(isEdit);
+  const [expandedQuestions, setExpandedQuestions] = useState({});
 
   useEffect(() => {
     if (isEdit) {
@@ -73,6 +78,39 @@ const AdminTestEdit = () => {
   const deleteQuestion = (index) => {
     const questions = test.questions.filter((_, i) => i !== index);
     setTest({ ...test, questions });
+  };
+
+  const duplicateQuestion = (index) => {
+    const questions = [...test.questions];
+    const questionToDuplicate = { ...questions[index] };
+    questionToDuplicate.id = `q_${Date.now()}`;
+    questionToDuplicate.choices = questionToDuplicate.choices.map(choice => ({
+      ...choice,
+      id: `c_${Date.now()}_${Math.random()}`,
+    }));
+    questions.splice(index + 1, 0, questionToDuplicate);
+    setTest({ ...test, questions });
+  };
+
+  const moveQuestionUp = (index) => {
+    if (index === 0) return;
+    const questions = [...test.questions];
+    [questions[index - 1], questions[index]] = [questions[index], questions[index - 1]];
+    setTest({ ...test, questions });
+  };
+
+  const moveQuestionDown = (index) => {
+    if (index === test.questions.length - 1) return;
+    const questions = [...test.questions];
+    [questions[index], questions[index + 1]] = [questions[index + 1], questions[index]];
+    setTest({ ...test, questions });
+  };
+
+  const toggleQuestionExpand = (index) => {
+    setExpandedQuestions({
+      ...expandedQuestions,
+      [index]: !expandedQuestions[index],
+    });
   };
 
   const addChoice = (questionIndex) => {
@@ -150,6 +188,34 @@ const AdminTestEdit = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
+              <label className="form-label">Category</label>
+              <input
+                type="text"
+                name="category"
+                className="form-control"
+                value={test.category}
+                onChange={handleChange}
+                placeholder="e.g., Programming, Mathematics"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Difficulty Level</label>
+              <select
+                name="difficulty"
+                className="form-control"
+                value={test.difficulty}
+                onChange={handleChange}
+              >
+                <option value="BEGINNER">Beginner</option>
+                <option value="INTERMEDIATE">Intermediate</option>
+                <option value="ADVANCED">Advanced</option>
+              </select>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="form-group">
               <label className="form-label">Duration (minutes)</label>
               <input
                 type="number"
@@ -207,14 +273,79 @@ const AdminTestEdit = () => {
             </button>
           </div>
 
-          {test.questions.map((question, qIndex) => (
-            <div key={question.id} className="card" style={{ background: '#f8f9fa' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <h3>Question {qIndex + 1}</h3>
-                <button onClick={() => deleteQuestion(qIndex)} className="btn btn-danger" style={{ padding: '0.25rem 0.75rem' }}>
-                  Delete
-                </button>
-              </div>
+          {test.questions.map((question, qIndex) => {
+            const isExpanded = expandedQuestions[qIndex] !== false; // Default to expanded
+            return (
+              <div key={question.id} className="card" style={{
+                background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%)',
+                border: '2px solid #e0f2fe',
+                marginBottom: '1rem'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: isExpanded ? '1rem' : '0',
+                  padding: '0.5rem',
+                  background: '#e0f2fe',
+                  borderRadius: '8px',
+                  cursor: 'pointer'
+                }} onClick={() => toggleQuestionExpand(qIndex)}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ fontSize: '1.5rem' }}>{isExpanded ? '▼' : '▶'}</span>
+                    <h3 style={{ margin: 0 }}>Question {qIndex + 1}</h3>
+                    {!isExpanded && question.text && (
+                      <span style={{
+                        color: '#64748b',
+                        fontSize: '0.9rem',
+                        maxWidth: '400px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        - {question.text}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.5rem' }} onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => moveQuestionUp(qIndex)}
+                      className="btn btn-secondary"
+                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.9rem' }}
+                      disabled={qIndex === 0}
+                      title="Move Up"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={() => moveQuestionDown(qIndex)}
+                      className="btn btn-secondary"
+                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.9rem' }}
+                      disabled={qIndex === test.questions.length - 1}
+                      title="Move Down"
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={() => duplicateQuestion(qIndex)}
+                      className="btn btn-info"
+                      style={{ padding: '0.25rem 0.75rem', fontSize: '0.9rem' }}
+                      title="Duplicate Question"
+                    >
+                      📋 Duplicate
+                    </button>
+                    <button
+                      onClick={() => deleteQuestion(qIndex)}
+                      className="btn btn-danger"
+                      style={{ padding: '0.25rem 0.75rem', fontSize: '0.9rem' }}
+                    >
+                      🗑 Delete
+                    </button>
+                  </div>
+                </div>
+
+                {isExpanded && (
+                  <div style={{ padding: '0 0.5rem' }}>
 
               <div className="form-group">
                 <label className="form-label">Question Type</label>
@@ -315,8 +446,11 @@ const AdminTestEdit = () => {
                   />
                 </div>
               )}
-            </div>
-          ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         <div className="card">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -32,7 +34,7 @@ const Login = () => {
         navigate('/tests');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Invalid email or password');
+      setError(err.response?.data?.message || t('login.invalidEmailOrPassword'));
     } finally {
       setLoading(false);
     }
@@ -42,13 +44,13 @@ const Login = () => {
     <div className="main-content">
       <div className="auth-container">
         <div className="auth-card">
-          <h2 className="auth-title">Login</h2>
+          <h2 className="auth-title">{t('login.title')}</h2>
 
           {error && <div className="alert alert-error">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label">{t('login.email')}</label>
               <input
                 type="email"
                 name="email"
@@ -60,7 +62,7 @@ const Login = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label">{t('login.password')}</label>
               <input
                 type="password"
                 name="password"
@@ -72,16 +74,16 @@ const Login = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? t('login.loggingIn') : t('login.submit')}
             </button>
           </form>
 
           <div className="auth-link">
-            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="/forgot-password">{t('login.forgotPassword')}</Link>
           </div>
 
           <div className="auth-link">
-            Don't have an account? <Link to="/register">Register</Link>
+            {t('login.noAccount')} <Link to="/register">{t('login.registerLink')}</Link>
           </div>
         </div>
       </div>

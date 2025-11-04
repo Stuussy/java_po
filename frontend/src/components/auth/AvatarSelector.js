@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { AVAILABLE_AVATARS, getAvatarById } from '../../utils/avatars';
+import { useLanguage } from '../../contexts/LanguageContext';
 import '../../styles/AvatarSelector.css';
 
 const AvatarSelector = ({ currentAvatar, onSelect, onClose }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(currentAvatar || 'avatar1');
+  const { t } = useLanguage();
 
   const handleSelect = (avatarId) => {
     setSelectedAvatar(avatarId);
@@ -18,7 +20,7 @@ const AvatarSelector = ({ currentAvatar, onSelect, onClose }) => {
     <div className="avatar-selector-overlay" onClick={onClose}>
       <div className="avatar-selector-modal" onClick={(e) => e.stopPropagation()}>
         <div className="avatar-selector-header">
-          <h2>Choose Your Avatar</h2>
+          <h2>{t('avatarSelector.title')}</h2>
           <button className="close-btn" onClick={onClose}>✕</button>
         </div>
 
@@ -44,8 +46,8 @@ const AvatarSelector = ({ currentAvatar, onSelect, onClose }) => {
         </div>
 
         <div className="avatar-selector-footer">
-          <button className="btn btn-secondary" onClick={onClose}>Cancel</button>
-          <button className="btn btn-success" onClick={handleSave}>Save Avatar</button>
+          <button className="btn btn-secondary" onClick={onClose}>{t('avatarSelector.close')}</button>
+          <button className="btn btn-success" onClick={handleSave}>{t('avatarSelector.save')}</button>
         </div>
       </div>
     </div>

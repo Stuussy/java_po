@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { testsAPI } from '../api/tests';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Tests = () => {
+  const { t } = useLanguage();
   const [tests, setTests] = useState([]);
   const [filteredTests, setFilteredTests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,23 +93,23 @@ const Tests = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
-        <h1 style={{ marginBottom: '2rem' }}>Available Tests</h1>
+        <h1 style={{ marginBottom: '2rem' }}>{t('tests.title')}</h1>
 
         {/* Filters Section */}
         <div className="card" style={{ marginBottom: '2rem' }}>
-          <h3 style={{ marginBottom: '1rem', fontSize: '1.2rem' }}>🔍 Filters & Search</h3>
+          <h3 style={{ marginBottom: '1rem', fontSize: '1.2rem' }}>🔍 {t('tests.filters')}</h3>
 
           <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <input
               type="text"
               className="form-control"
-              placeholder="🔎 Search by title or description..."
+              placeholder={`🔎 ${t('tests.search')}`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               style={{ fontSize: '1rem' }}
@@ -118,14 +120,14 @@ const Tests = () => {
             {/* Category Filter */}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                📂 Category
+                📂 {t('tests.category')}
               </label>
               <select
                 className="form-control"
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
-                <option value="all">All Categories</option>
+                <option value="all">{t('tests.allCategories')}</option>
                 {getUniqueCategories().map(category => (
                   <option key={category} value={category}>{category}</option>
                 ))}
@@ -135,47 +137,47 @@ const Tests = () => {
             {/* Difficulty Filter */}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                ⭐ Difficulty
+                ⭐ {t('tests.difficulty')}
               </label>
               <select
                 className="form-control"
                 value={selectedDifficulty}
                 onChange={(e) => setSelectedDifficulty(e.target.value)}
               >
-                <option value="all">All Levels</option>
-                <option value="BEGINNER">Beginner</option>
-                <option value="INTERMEDIATE">Intermediate</option>
-                <option value="ADVANCED">Advanced</option>
+                <option value="all">{t('tests.allLevels')}</option>
+                <option value="BEGINNER">{t('difficulty.BEGINNER')}</option>
+                <option value="INTERMEDIATE">{t('difficulty.INTERMEDIATE')}</option>
+                <option value="ADVANCED">{t('difficulty.ADVANCED')}</option>
               </select>
             </div>
 
             {/* Sort By */}
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold', fontSize: '0.9rem' }}>
-                🔄 Sort By
+                🔄 {t('tests.sortBy')}
               </label>
               <select
                 className="form-control"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                <option value="title">Title (A-Z)</option>
-                <option value="duration">Duration</option>
-                <option value="questions">Questions Count</option>
-                <option value="difficulty">Difficulty Level</option>
+                <option value="title">{t('tests.sortTitle')}</option>
+                <option value="duration">{t('tests.sortDuration')}</option>
+                <option value="questions">{t('tests.sortQuestions')}</option>
+                <option value="difficulty">{t('tests.sortDifficulty')}</option>
               </select>
             </div>
           </div>
 
           {/* Results count */}
           <div style={{ marginTop: '1rem', color: 'var(--text-light)', fontSize: '0.9rem' }}>
-            Showing {filteredTests.length} of {tests.length} test{tests.length !== 1 ? 's' : ''}
+            {t('tests.showing')} {filteredTests.length} {t('tests.of')} {tests.length} {tests.length !== 1 ? t('tests.tests_plural') : t('tests.test')}
           </div>
         </div>
 
         {filteredTests.length === 0 ? (
           <div className="card">
-            <p>No tests found matching your filters. Try adjusting your search criteria.</p>
+            <p>{t('tests.noTests')}</p>
           </div>
         ) : (
           <div className="grid grid-2">
@@ -185,7 +187,7 @@ const Tests = () => {
                   <h3 className="card-title" style={{ margin: 0 }}>{test.title}</h3>
                   {test.difficulty && (
                     <span className={`badge ${getDifficultyBadgeClass(test.difficulty)}`} style={{ flexShrink: 0, marginLeft: '1rem' }}>
-                      {test.difficulty}
+                      {t(`difficulty.${test.difficulty}`)}
                     </span>
                   )}
                 </div>
@@ -202,13 +204,13 @@ const Tests = () => {
 
                 <div style={{ marginBottom: '1rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                   <div>
-                    <strong>⏱️ Duration:</strong> {test.durationMinutes} min
+                    <strong>⏱️ {t('tests.duration')}:</strong> {test.durationMinutes} {t('tests.minutes')}
                   </div>
                   <div>
-                    <strong>❓ Questions:</strong> {test.questions?.length || 0}
+                    <strong>❓ {t('tests.questions')}:</strong> {test.questions?.length || 0}
                   </div>
                   <div>
-                    <strong>🎯 Passing:</strong> {test.passingScore}%
+                    <strong>🎯 {t('tests.passing')}:</strong> {test.passingScore}%
                   </div>
                 </div>
 
@@ -223,7 +225,7 @@ const Tests = () => {
                 )}
 
                 <Link to={`/test/${test.id}/start`} className="btn btn-primary" style={{ width: '100%' }}>
-                  Start Test →
+                  {t('tests.startTest')} →
                 </Link>
               </div>
             ))}

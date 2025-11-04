@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { testsAPI } from '../api/tests';
 import { authAPI } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import AvatarSelector from '../components/auth/AvatarSelector';
 import { getAvatarById } from '../utils/avatars';
 import '../styles/AvatarSelector.css';
 
 const Profile = () => {
   const { user, logout, updateUser } = useAuth();
+  const { t } = useLanguage();
   const [attempts, setAttempts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
@@ -45,7 +47,7 @@ const Profile = () => {
     <div className="main-content">
       <div className="container">
         <div className="card">
-          <h1 className="card-title">My Profile</h1>
+          <h1 className="card-title">{t('profile.title')}</h1>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
@@ -70,26 +72,26 @@ const Profile = () => {
                 className="btn btn-primary"
                 style={{ fontSize: '0.9rem', padding: '0.5rem 1rem' }}
               >
-                Change Avatar
+                {t('profile.changeAvatar')}
               </button>
             </div>
 
             <div style={{ flex: 1, minWidth: '200px' }}>
               <div style={{ marginBottom: '1rem' }}>
-                <strong>Name:</strong> {user?.name}
+                <strong>{t('profile.name')}:</strong> {user?.name}
               </div>
               <div style={{ marginBottom: '1rem' }}>
-                <strong>Email:</strong> {user?.email}
+                <strong>{t('profile.email')}:</strong> {user?.email}
               </div>
               <div style={{ marginBottom: '1rem' }}>
-                <strong>Role:</strong>{' '}
+                <strong>{t('profile.role')}:</strong>{' '}
                 <span className={`badge ${user?.role === 'ADMIN' ? 'badge-danger' : 'badge-info'}`}>
                   {user?.role}
                 </span>
               </div>
               {user?.organization && (
                 <div style={{ marginBottom: '1rem' }}>
-                  <strong>Organization:</strong> {user.organization}
+                  <strong>{t('profile.organization')}:</strong> {user.organization}
                 </div>
               )}
             </div>
@@ -97,28 +99,28 @@ const Profile = () => {
 
           <div style={{ marginTop: '2rem' }}>
             <button onClick={logout} className="btn btn-danger">
-              Logout
+              {t('header.logout')}
             </button>
           </div>
         </div>
 
         <div className="card">
-          <h2 className="card-title">Test History</h2>
+          <h2 className="card-title">{t('profile.testHistory')}</h2>
 
           {loading ? (
-            <div className="loading">Loading...</div>
+            <div className="loading">{t('common.loading')}</div>
           ) : attempts.length === 0 ? (
-            <p>No test attempts yet.</p>
+            <p>{t('profile.noAttempts')}</p>
           ) : (
             <div style={{ overflowX: 'auto' }}>
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Date</th>
-                    <th>Test ID</th>
-                    <th>Score</th>
-                    <th>Status</th>
-                    <th>Actions</th>
+                    <th>{t('profile.date')}</th>
+                    <th>{t('profile.testId')}</th>
+                    <th>{t('profile.score')}</th>
+                    <th>{t('profile.status')}</th>
+                    <th>{t('profile.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -145,7 +147,7 @@ const Profile = () => {
                       <td>
                         {attempt.status === 'GRADED' && (
                           <Link to={`/result/${attempt.id}`} className="btn btn-primary" style={{ padding: '0.25rem 0.75rem' }}>
-                            View Result
+                            {t('profile.viewResult')}
                           </Link>
                         )}
                       </td>

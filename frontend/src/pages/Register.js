@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,12 +29,12 @@ const Register = () => {
     setError('');
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('register.passwordMismatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('register.passwordTooShort'));
       return;
     }
 
@@ -47,7 +49,7 @@ const Register = () => {
       });
       navigate('/tests');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError(err.response?.data?.message || t('register.registrationFailed'));
     } finally {
       setLoading(false);
     }
@@ -57,13 +59,13 @@ const Register = () => {
     <div className="main-content">
       <div className="auth-container">
         <div className="auth-card">
-          <h2 className="auth-title">Create Account</h2>
+          <h2 className="auth-title">{t('register.title')}</h2>
 
           {error && <div className="alert alert-error">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Name</label>
+              <label className="form-label">{t('register.name')}</label>
               <input
                 type="text"
                 name="name"
@@ -75,7 +77,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label">{t('register.email')}</label>
               <input
                 type="email"
                 name="email"
@@ -87,7 +89,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label">{t('register.password')}</label>
               <input
                 type="password"
                 name="password"
@@ -99,7 +101,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirm Password</label>
+              <label className="form-label">{t('register.confirmPassword')}</label>
               <input
                 type="password"
                 name="confirmPassword"
@@ -111,7 +113,7 @@ const Register = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Organization (Optional)</label>
+              <label className="form-label">{t('register.organization')}</label>
               <input
                 type="text"
                 name="organization"
@@ -122,12 +124,12 @@ const Register = () => {
             </div>
 
             <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
-              {loading ? 'Creating Account...' : 'Create Account'}
+              {loading ? t('register.creatingAccount') : t('register.submit')}
             </button>
           </form>
 
           <div className="auth-link">
-            Already have an account? <Link to="/login">Login</Link>
+            {t('register.hasAccount')} <Link to="/login">{t('register.loginLink')}</Link>
           </div>
         </div>
       </div>

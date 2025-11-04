@@ -11,7 +11,8 @@
   },
   "home": {
     "welcome": "Welcome to Online Quiz System",
-    "description": "Test your knowledge with our interactive quizzes and get instant results!"
+    "description": "Test your knowledge with our interactive quizzes and get instant results!",
+    "noTests": "No tests available at the moment."
   },
   "tests": {
     "title": "Available Tests",
@@ -47,19 +48,27 @@
     "email": "Email",
     "password": "Password",
     "submit": "Login",
+    "loggingIn": "Logging in...",
+    "forgotPassword": "Forgot Password?",
     "noAccount": "Don't have an account?",
-    "registerLink": "Register here",
-    "error": "Invalid credentials"
+    "registerLink": "Register",
+    "error": "Invalid credentials",
+    "invalidEmailOrPassword": "Invalid email or password"
   },
   "register": {
-    "title": "Register",
-    "name": "Full Name",
+    "title": "Create Account",
+    "name": "Name",
     "email": "Email",
     "password": "Password",
-    "organization": "Organization (optional)",
-    "submit": "Register",
+    "confirmPassword": "Confirm Password",
+    "organization": "Organization (Optional)",
+    "submit": "Create Account",
+    "creatingAccount": "Creating Account...",
     "hasAccount": "Already have an account?",
-    "loginLink": "Login here"
+    "loginLink": "Login",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "registrationFailed": "Registration failed"
   },
   "profile": {
     "title": "My Profile",
@@ -76,6 +85,13 @@
     "actions": "Actions",
     "viewResult": "View Result",
     "noAttempts": "No test attempts yet."
+  },
+  "avatarSelector": {
+    "title": "Choose Your Avatar",
+    "preview": "Preview",
+    "select": "Select",
+    "save": "Save Avatar",
+    "close": "Close"
   },
   "common": {
     "loading": "Loading...",

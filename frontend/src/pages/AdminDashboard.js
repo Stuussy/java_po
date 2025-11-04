@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { adminAPI } from '../api/admin';
+import { useLanguage } from '../contexts/LanguageContext';
 
 const AdminDashboard = () => {
+  const { t } = useLanguage();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,43 +24,43 @@ const AdminDashboard = () => {
   };
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return <div className="loading">{t('common.loading')}</div>;
   }
 
   return (
     <div className="main-content">
       <div className="container">
-        <h1 style={{ marginBottom: '2rem' }}>Admin Dashboard</h1>
+        <h1 style={{ marginBottom: '2rem' }}>{t('admin.dashboard.title')}</h1>
 
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-value">{stats?.totalUsers || 0}</div>
-            <div className="stat-label">Total Users</div>
+            <div className="stat-label">{t('admin.dashboard.totalUsers')}</div>
           </div>
           <div className="stat-card">
             <div className="stat-value">{stats?.totalTests || 0}</div>
-            <div className="stat-label">Total Tests</div>
+            <div className="stat-label">{t('admin.dashboard.totalTests')}</div>
           </div>
           <div className="stat-card">
             <div className="stat-value">{stats?.publishedTests || 0}</div>
-            <div className="stat-label">Published Tests</div>
+            <div className="stat-label">{t('admin.dashboard.publishedTests')}</div>
           </div>
         </div>
 
         <div className="grid grid-2" style={{ marginTop: '2rem' }}>
           <Link to="/admin/tests" className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h2 className="card-title">Manage Tests</h2>
-            <p className="card-description">Create, edit, and delete tests</p>
+            <h2 className="card-title">{t('admin.dashboard.manageTests')}</h2>
+            <p className="card-description">{t('admin.dashboard.manageTestsDesc')}</p>
           </Link>
 
           <Link to="/admin/users" className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h2 className="card-title">Manage Users</h2>
-            <p className="card-description">View and manage user accounts</p>
+            <h2 className="card-title">{t('admin.dashboard.manageUsers')}</h2>
+            <p className="card-description">{t('admin.dashboard.manageUsersDesc')}</p>
           </Link>
 
           <Link to="/admin/reports" className="card" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <h2 className="card-title">Reports & Analytics</h2>
-            <p className="card-description">View test statistics and user performance</p>
+            <h2 className="card-title">{t('admin.dashboard.reports')}</h2>
+            <p className="card-description">{t('admin.dashboard.reportsDesc')}</p>
           </Link>
         </div>
       </div>

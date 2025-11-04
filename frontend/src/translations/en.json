@@ -1,0 +1,93 @@
+{
+  "header": {
+    "title": "Online Quiz System",
+    "home": "Home",
+    "tests": "Tests",
+    "profile": "Profile",
+    "admin": "Admin",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "home": {
+    "welcome": "Welcome to Online Quiz System",
+    "description": "Test your knowledge with our interactive quizzes and get instant results!"
+  },
+  "tests": {
+    "title": "Available Tests",
+    "filters": "Filters & Search",
+    "search": "Search by title or description...",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "difficulty": "Difficulty",
+    "allLevels": "All Levels",
+    "sortBy": "Sort By",
+    "sortTitle": "Title (A-Z)",
+    "sortDuration": "Duration",
+    "sortQuestions": "Questions Count",
+    "sortDifficulty": "Difficulty Level",
+    "showing": "Showing",
+    "of": "of",
+    "test": "test",
+    "tests_plural": "tests",
+    "noTests": "No tests found matching your filters. Try adjusting your search criteria.",
+    "duration": "Duration",
+    "questions": "Questions",
+    "passing": "Passing",
+    "minutes": "min",
+    "startTest": "Start Test"
+  },
+  "difficulty": {
+    "BEGINNER": "Beginner",
+    "INTERMEDIATE": "Intermediate",
+    "ADVANCED": "Advanced"
+  },
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "noAccount": "Don't have an account?",
+    "registerLink": "Register here",
+    "error": "Invalid credentials"
+  },
+  "register": {
+    "title": "Register",
+    "name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "organization": "Organization (optional)",
+    "submit": "Register",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Login here"
+  },
+  "profile": {
+    "title": "My Profile",
+    "changeAvatar": "Change Avatar",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "organization": "Organization",
+    "testHistory": "Test History",
+    "date": "Date",
+    "testId": "Test ID",
+    "score": "Score",
+    "status": "Status",
+    "actions": "Actions",
+    "viewResult": "View Result",
+    "noAttempts": "No test attempts yet."
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit"
+  }
+}

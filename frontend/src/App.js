@@ -24,6 +24,7 @@ import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminTests from './pages/AdminTests';
 import AdminTestEdit from './pages/AdminTestEdit';
+import AdminAIGenerate from './pages/AdminAIGenerate';
 import AdminUsers from './pages/AdminUsers';
 import AdminReports from './pages/AdminReports';
 
@@ -115,6 +116,14 @@ function App() {
                 element={
                   <PrivateRoute adminOnly>
                     <AdminTestEdit />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/admin/ai-generate"
+                element={
+                  <PrivateRoute adminOnly>
+                    <AdminAIGenerate />
                   </PrivateRoute>
                 }
               />

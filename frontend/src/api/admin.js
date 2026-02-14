@@ -46,4 +46,19 @@ export const adminAPI = {
     const response = await axios.get('/admin/reports/dashboard');
     return response.data;
   },
+
+  getAIStatus: async () => {
+    const response = await axios.get('/admin/ai/status');
+    return response.data;
+  },
+
+  generateTestWithAI: async (request) => {
+    const response = await axios.post('/admin/ai/generate', request);
+    return response.data;
+  },
+
+  generateAndSaveTestWithAI: async (request) => {
+    const response = await axios.post('/admin/ai/generate-and-save', request);
+    return response.data;
+  },
 };

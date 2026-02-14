@@ -1,10 +1,12 @@
 package com.quizsystem.controller;
 
+import com.quizsystem.dto.AIGenerateRequest;
 import com.quizsystem.dto.UserResponse;
 import com.quizsystem.model.Test;
 import com.quizsystem.model.TestAttempt;
 import com.quizsystem.model.User;
 import com.quizsystem.repository.UserRepository;
+import com.quizsystem.service.GeminiService;
 import com.quizsystem.service.TestAttemptService;
 import com.quizsystem.service.TestService;
 import com.quizsystem.service.UserService;
@@ -28,6 +30,7 @@ public class AdminController {
     private final UserService userService;
     private final TestAttemptService attemptService;
     private final UserRepository userRepository;
+    private final GeminiService geminiService;
 
     
     @GetMapping("/tests")
@@ -114,5 +117,42 @@ public class AdminController {
         stats.put("publishedTests", tests.stream().filter(Test::getPublished).count());
 
         return ResponseEntity.ok(stats);
+    }
+
+    @PostMapping("/ai/generate")
+    public ResponseEntity<?> generateTestWithAI(@RequestBody AIGenerateRequest request, Authentication authentication) {
+        try {
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            Test generatedTest = geminiService.generateTest(request);
+            generatedTest.setCreatedBy(user.getId());
+            return ResponseEntity.ok(generatedTest);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @PostMapping("/ai/generate-and-save")
+    public ResponseEntity<?> generateAndSaveTestWithAI(@RequestBody AIGenerateRequest request, Authentication authentication) {
+        try {
+            User user = userRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            Test generatedTest = geminiService.generateTest(request);
+            Test savedTest = testService.createTest(generatedTest, user.getId());
+            return ResponseEntity.ok(savedTest);
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
+    }
+
+    @GetMapping("/ai/status")
+    public ResponseEntity<Map<String, Boolean>> getAIStatus() {
+        Map<String, Boolean> status = new HashMap<>();
+        status.put("configured", geminiService.isConfigured());
+        return ResponseEntity.ok(status);
     }
 }

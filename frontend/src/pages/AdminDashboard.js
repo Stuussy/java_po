@@ -62,6 +62,16 @@ const AdminDashboard = () => {
             <h2 className="card-title">{t('admin.dashboard.reports')}</h2>
             <p className="card-description">{t('admin.dashboard.reportsDesc')}</p>
           </Link>
+
+          <Link to="/admin/ai-generate" className="card" style={{
+            textDecoration: 'none',
+            color: 'inherit',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white'
+          }}>
+            <h2 className="card-title">{t('admin.ai.title')}</h2>
+            <p className="card-description" style={{ color: 'rgba(255,255,255,0.9)' }}>{t('admin.ai.generateWithAI')}</p>
+          </Link>
         </div>
       </div>
     </div>

@@ -41,9 +41,17 @@ const AdminTests = () => {
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <h1>{t('admin.tests.title')}</h1>
-          <Link to="/admin/tests/new" className="btn btn-success">
-            {t('admin.tests.createNew')}
-          </Link>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <Link to="/admin/ai-generate" className="btn btn-primary" style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none'
+            }}>
+              {t('admin.ai.generateWithAI')}
+            </Link>
+            <Link to="/admin/tests/new" className="btn btn-success">
+              {t('admin.tests.createNew')}
+            </Link>
+          </div>
         </div>
 
         {tests.length === 0 ? (

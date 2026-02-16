@@ -10,22 +10,23 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.*;
 
 @Slf4j
 @Service
-public class GeminiService {
+public class AIService {
 
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
-    @Value("${gemini.api.key:}")
+    @Value("${ai.api.key:}")
     private String apiKey;
 
-    @Value("${gemini.api.url}")
+    @Value("${ai.api.url}")
     private String apiUrl;
 
-    public GeminiService(ObjectMapper objectMapper) {
+    public AIService(ObjectMapper objectMapper) {
         this.webClient = WebClient.builder()
                 .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024))
                 .build();
@@ -38,13 +39,11 @@ public class GeminiService {
 
     public Test generateTest(AIGenerateRequest request) {
         if (!isConfigured()) {
-            throw new RuntimeException("Gemini API key is not configured. Set the GEMINI_API_KEY environment variable.");
+            throw new RuntimeException("AI API key is not configured. Set the ai.api.key property.");
         }
 
         String prompt = buildPrompt(request);
-
-        String responseText = callGeminiAPI(prompt);
-
+        String responseText = callAIAPI(prompt);
         return parseTestFromResponse(responseText, request);
     }
 
@@ -137,43 +136,42 @@ public class GeminiService {
         );
     }
 
-    private String callGeminiAPI(String prompt) {
-        String url = apiUrl + "?key=" + apiKey;
-
+    private String callAIAPI(String prompt) {
         Map<String, Object> requestBody = new HashMap<>();
-        List<Map<String, Object>> contents = new ArrayList<>();
-        Map<String, Object> content = new HashMap<>();
-        List<Map<String, Object>> parts = new ArrayList<>();
-        Map<String, Object> part = new HashMap<>();
-        part.put("text", prompt);
-        parts.add(part);
-        content.put("parts", parts);
-        contents.add(content);
-        requestBody.put("contents", contents);
-
-        Map<String, Object> generationConfig = new HashMap<>();
-        generationConfig.put("temperature", 0.7);
-        generationConfig.put("maxOutputTokens", 8192);
-        requestBody.put("generationConfig", generationConfig);
+        requestBody.put("message", prompt);
+        requestBody.put("model", "premium-default");
 
         try {
             String response = webClient.post()
-                    .uri(url)
+                    .uri(apiUrl)
                     .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + apiKey)
                     .bodyValue(requestBody)
                     .retrieve()
                     .bodyToMono(String.class)
+                    .timeout(Duration.ofSeconds(120))
                     .block();
 
+            log.debug("AI API raw response: {}", response);
+
             JsonNode rootNode = objectMapper.readTree(response);
-            JsonNode candidates = rootNode.path("candidates");
-            if (candidates.isArray() && candidates.size() > 0) {
-                return candidates.get(0).path("content").path("parts").get(0).path("text").asText();
+
+            String status = rootNode.path("status").asText("");
+            if (!"success".equals(status)) {
+                String errorMsg = rootNode.path("message").asText(rootNode.path("error").asText("Unknown error"));
+                throw new RuntimeException("AI API error: " + errorMsg);
             }
 
-            throw new RuntimeException("Empty response from Gemini API");
+            String responseText = rootNode.path("response").asText("");
+            if (responseText.isEmpty()) {
+                throw new RuntimeException("Empty response from AI API");
+            }
+
+            return responseText;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            log.error("Error calling Gemini API: {}", e.getMessage(), e);
+            log.error("Error calling AI API: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to generate test with AI: " + e.getMessage());
         }
     }
@@ -181,6 +179,7 @@ public class GeminiService {
     private Test parseTestFromResponse(String responseText, AIGenerateRequest request) {
         try {
             String jsonStr = responseText.trim();
+            // Strip markdown code block markers if present
             if (jsonStr.startsWith("```json")) {
                 jsonStr = jsonStr.substring(7);
             }
@@ -191,6 +190,13 @@ public class GeminiService {
                 jsonStr = jsonStr.substring(0, jsonStr.length() - 3);
             }
             jsonStr = jsonStr.trim();
+
+            // Try to extract JSON object if there's extra text around it
+            int jsonStart = jsonStr.indexOf('{');
+            int jsonEnd = jsonStr.lastIndexOf('}');
+            if (jsonStart >= 0 && jsonEnd > jsonStart) {
+                jsonStr = jsonStr.substring(jsonStart, jsonEnd + 1);
+            }
 
             JsonNode rootNode = objectMapper.readTree(jsonStr);
 
@@ -240,6 +246,7 @@ public class GeminiService {
 
         } catch (Exception e) {
             log.error("Error parsing AI response: {}", e.getMessage(), e);
+            log.error("Raw response text: {}", responseText);
             throw new RuntimeException("Failed to parse AI-generated test. Please try again.");
         }
     }

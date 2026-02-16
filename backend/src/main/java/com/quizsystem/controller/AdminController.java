@@ -6,7 +6,7 @@ import com.quizsystem.model.Test;
 import com.quizsystem.model.TestAttempt;
 import com.quizsystem.model.User;
 import com.quizsystem.repository.UserRepository;
-import com.quizsystem.service.GeminiService;
+import com.quizsystem.service.AIService;
 import com.quizsystem.service.TestAttemptService;
 import com.quizsystem.service.TestService;
 import com.quizsystem.service.UserService;
@@ -30,7 +30,7 @@ public class AdminController {
     private final UserService userService;
     private final TestAttemptService attemptService;
     private final UserRepository userRepository;
-    private final GeminiService geminiService;
+    private final AIService aiService;
 
     
     @GetMapping("/tests")
@@ -124,7 +124,7 @@ public class AdminController {
         try {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            Test generatedTest = geminiService.generateTest(request);
+            Test generatedTest = aiService.generateTest(request);
             generatedTest.setCreatedBy(user.getId());
             return ResponseEntity.ok(generatedTest);
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public class AdminController {
         try {
             User user = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User not found"));
-            Test generatedTest = geminiService.generateTest(request);
+            Test generatedTest = aiService.generateTest(request);
             Test savedTest = testService.createTest(generatedTest, user.getId());
             return ResponseEntity.ok(savedTest);
         } catch (Exception e) {
@@ -152,7 +152,7 @@ public class AdminController {
     @GetMapping("/ai/status")
     public ResponseEntity<Map<String, Boolean>> getAIStatus() {
         Map<String, Boolean> status = new HashMap<>();
-        status.put("configured", geminiService.isConfigured());
+        status.put("configured", aiService.isConfigured());
         return ResponseEntity.ok(status);
     }
 }

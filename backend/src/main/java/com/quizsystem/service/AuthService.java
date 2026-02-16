@@ -3,10 +3,13 @@ package com.quizsystem.service;
 import com.quizsystem.dto.AuthRequest;
 import com.quizsystem.dto.AuthResponse;
 import com.quizsystem.dto.RegisterRequest;
+import com.quizsystem.model.PasswordResetToken;
 import com.quizsystem.model.User;
+import com.quizsystem.repository.PasswordResetTokenRepository;
 import com.quizsystem.repository.UserRepository;
 import com.quizsystem.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,12 +18,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordResetTokenRepository resetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
@@ -75,5 +81,58 @@ public class AuthService {
                 .userId(user.getId())
                 .avatar(user.getAvatar())
                 .build();
+    }
+
+    public String createPasswordResetToken(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        resetTokenRepository.deleteByEmail(email);
+
+        String tokenValue = UUID.randomUUID().toString();
+
+        PasswordResetToken resetToken = PasswordResetToken.builder()
+                .email(email)
+                .token(tokenValue)
+                .used(false)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusHours(1))
+                .build();
+
+        resetTokenRepository.save(resetToken);
+
+        log.info("Password reset token generated for {}: {}", email, tokenValue);
+
+        return tokenValue;
+    }
+
+    public boolean validateResetToken(String token) {
+        return resetTokenRepository.findByToken(token)
+                .map(t -> !t.isUsed() && !t.isExpired())
+                .orElse(false);
+    }
+
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid or expired reset token"));
+
+        if (resetToken.isUsed()) {
+            throw new RuntimeException("This reset token has already been used");
+        }
+
+        if (resetToken.isExpired()) {
+            throw new RuntimeException("This reset token has expired");
+        }
+
+        User user = userRepository.findByEmail(resetToken.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        resetToken.setUsed(true);
+        resetTokenRepository.save(resetToken);
+
+        log.info("Password successfully reset for user: {}", user.getEmail());
     }
 }

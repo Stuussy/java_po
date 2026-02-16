@@ -40,4 +40,21 @@ export const testsAPI = {
     const response = await axios.get('/tests/my-attempts');
     return response.data;
   },
+
+  generateCertificate: async (attemptId) => {
+    const response = await axios.post(`/certificates/generate/${attemptId}`);
+    return response.data;
+  },
+
+  downloadCertificate: async (certificateId) => {
+    const response = await axios.get(`/certificates/${certificateId}/download`, {
+      responseType: 'blob',
+    });
+    return response.data;
+  },
+
+  getMyCertificates: async () => {
+    const response = await axios.get('/certificates/my');
+    return response.data;
+  },
 };

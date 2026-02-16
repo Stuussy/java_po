@@ -2,6 +2,7 @@
   "header": {
     "title": "Online Quiz System",
     "home": "Home",
+    "courses": "Courses",
     "tests": "Tests",
     "profile": "Profile",
     "admin": "Admin",
@@ -248,6 +249,65 @@
     "openPlaceholder": "Type your answer here...",
     "numericPlaceholder": "Enter a number...",
     "unknownType": "Unknown question type"
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "description": "Enter your email and we'll send you a link to reset your password.",
+    "emailPlaceholder": "Enter your email address",
+    "sendLink": "Send Reset Link",
+    "sending": "Sending...",
+    "successMessage": "Password reset token has been generated!",
+    "errorMessage": "Error sending reset link. Please check your email.",
+    "tokenGenerated": "Reset token generated (demo mode):",
+    "goToReset": "Reset Password",
+    "backToLogin": "Back to Login"
+  },
+  "resetPassword": {
+    "title": "Reset Password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm New Password",
+    "confirmPasswordPlaceholder": "Confirm new password",
+    "resetButton": "Reset Password",
+    "resetting": "Resetting...",
+    "success": "Password reset successfully! Redirecting to login...",
+    "failed": "Failed to reset password",
+    "invalidToken": "Invalid or expired reset token",
+    "noToken": "No reset token provided.",
+    "requestNew": "Request New Token"
+  },
+  "courses": {
+    "title": "Learning Courses",
+    "description": "Master programming languages and technologies with our structured courses",
+    "noCourses": "No courses available at the moment.",
+    "modules": "modules",
+    "tests": "tests",
+    "courseModules": "Course Modules",
+    "courseTests": "Course Tests",
+    "notFound": "Course not found"
+  },
+  "result": {
+    "title": "Test Results",
+    "passed": "PASSED",
+    "failed": "FAILED",
+    "correctAnswers": "Correct Answers",
+    "points": "Points",
+    "passingScore": "Passing Score",
+    "started": "Started",
+    "submitted": "Submitted",
+    "duration": "Duration",
+    "viewReview": "View Detailed Review",
+    "retake": "Retake Test",
+    "notFound": "Result not found"
+  },
+  "certificate": {
+    "congratulations": "Congratulations!",
+    "available": "You passed the test! You can get your certificate.",
+    "generate": "Get Certificate",
+    "generating": "Generating...",
+    "download": "Download Certificate",
+    "verificationCode": "Verification Code",
+    "issued": "Issued"
   },
   "common": {
     "loading": "Loading...",

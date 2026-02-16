@@ -19,6 +19,7 @@ const Header = () => {
           </Link>
           <nav className="nav">
             <Link to="/">{t('header.home')}</Link>
+            <Link to="/courses">{t('header.courses')}</Link>
             <Link to="/tests">{t('header.tests')}</Link>
             {user ? (
               <>

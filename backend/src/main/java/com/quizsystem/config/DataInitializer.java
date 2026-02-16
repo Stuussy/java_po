@@ -1,7 +1,9 @@
 package com.quizsystem.config;
 
+import com.quizsystem.model.Course;
 import com.quizsystem.model.Test;
 import com.quizsystem.model.User;
+import com.quizsystem.repository.CourseRepository;
 import com.quizsystem.repository.TestRepository;
 import com.quizsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final TestRepository testRepository;
+    private final CourseRepository courseRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -65,6 +68,7 @@ public class DataInitializer implements CommandLineRunner {
         User admin = userRepository.findByEmail("admin@quiz.com").orElse(null);
         if (admin != null) {
             createDefaultTests(admin.getId());
+            createDefaultCourses();
         }
     }
 
@@ -487,5 +491,134 @@ public class DataInitializer implements CommandLineRunner {
 
         testRepository.save(test);
         log.info("Created: Database & SQL Fundamentals test");
+    }
+
+    private void createDefaultCourses() {
+        if (courseRepository.count() > 0) {
+            log.info("Courses already exist, skipping creation");
+            return;
+        }
+
+        log.info("Creating default courses...");
+
+        List<String> testIds = testRepository.findAll().stream()
+                .map(Test::getId)
+                .toList();
+
+        // Python Course
+        courseRepository.save(Course.builder()
+                .title("Python")
+                .description("Learn Python from scratch - the most popular programming language for beginners and professionals. Covers basics, OOP, data structures, and web development.")
+                .icon("python")
+                .color("#3776AB")
+                .category("Programming")
+                .difficulty(Course.DifficultyLevel.BEGINNER)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Introduction to Python").description("Variables, data types, operators").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Control Flow").description("Conditionals, loops, functions").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Data Structures").description("Lists, dictionaries, sets, tuples").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("OOP in Python").description("Classes, inheritance, polymorphism").orderIndex(4).build()
+                ))
+                .testIds(testIds.isEmpty() ? List.of() : List.of(testIds.get(0)))
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        // Java Course
+        courseRepository.save(Course.builder()
+                .title("Java")
+                .description("Master Java - a robust, object-oriented language used in enterprise development, Android apps, and backend systems. Spring Boot included.")
+                .icon("java")
+                .color("#ED8B00")
+                .category("Programming")
+                .difficulty(Course.DifficultyLevel.INTERMEDIATE)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Java Basics").description("Syntax, variables, operators").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("OOP Concepts").description("Classes, interfaces, abstract classes").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Collections Framework").description("Lists, Maps, Sets, Streams").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Spring Boot").description("REST APIs, dependency injection, MVC").orderIndex(4).build()
+                ))
+                .testIds(testIds.size() > 2 ? List.of(testIds.get(2)) : List.of())
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        // JavaScript Course
+        courseRepository.save(Course.builder()
+                .title("JavaScript")
+                .description("Learn JavaScript - the language of the web. Build interactive websites, modern web applications, and server-side programs with Node.js.")
+                .icon("javascript")
+                .color("#F7DF1E")
+                .category("Programming")
+                .difficulty(Course.DifficultyLevel.BEGINNER)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("JavaScript Fundamentals").description("Variables, types, functions").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("DOM Manipulation").description("Selectors, events, dynamic content").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Async JavaScript").description("Promises, async/await, fetch API").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("ES6+ Features").description("Arrow functions, destructuring, modules").orderIndex(4).build()
+                ))
+                .testIds(testIds.isEmpty() ? List.of() : List.of(testIds.get(0)))
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        // React Course
+        courseRepository.save(Course.builder()
+                .title("React")
+                .description("Build modern user interfaces with React. Learn components, hooks, state management, routing, and best practices for production apps.")
+                .icon("react")
+                .color("#61DAFB")
+                .category("Frontend")
+                .difficulty(Course.DifficultyLevel.INTERMEDIATE)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("React Basics").description("Components, JSX, props").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("State & Hooks").description("useState, useEffect, custom hooks").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Routing & Navigation").description("React Router, navigation patterns").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Advanced Patterns").description("Context, reducers, performance").orderIndex(4).build()
+                ))
+                .testIds(testIds.size() > 1 ? List.of(testIds.get(1)) : List.of())
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        // SQL & Databases Course
+        courseRepository.save(Course.builder()
+                .title("SQL & Databases")
+                .description("Master database concepts and SQL. Learn relational and NoSQL databases, queries, optimization, and data modeling for real projects.")
+                .icon("database")
+                .color("#336791")
+                .category("Database")
+                .difficulty(Course.DifficultyLevel.BEGINNER)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Database Fundamentals").description("Tables, schemas, relationships").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("SQL Queries").description("SELECT, INSERT, UPDATE, DELETE, JOIN").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("NoSQL Databases").description("MongoDB, document model").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Database Design").description("Normalization, indexing, optimization").orderIndex(4).build()
+                ))
+                .testIds(testIds.size() > 4 ? List.of(testIds.get(4)) : List.of())
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        // C++ Course
+        courseRepository.save(Course.builder()
+                .title("C++")
+                .description("Learn C++ for high-performance systems programming. Covers memory management, pointers, templates, STL, and modern C++ features.")
+                .icon("cplusplus")
+                .color("#00599C")
+                .category("Programming")
+                .difficulty(Course.DifficultyLevel.ADVANCED)
+                .modules(Arrays.asList(
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("C++ Basics").description("Syntax, variables, I/O").orderIndex(1).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("Pointers & Memory").description("Pointers, references, dynamic memory").orderIndex(2).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("OOP in C++").description("Classes, inheritance, virtual functions").orderIndex(3).build(),
+                        Course.CourseModule.builder().id(UUID.randomUUID().toString()).title("STL & Templates").description("Containers, algorithms, iterators").orderIndex(4).build()
+                ))
+                .testIds(List.of())
+                .published(true)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        log.info("Default courses created successfully!");
     }
 }

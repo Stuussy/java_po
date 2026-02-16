@@ -2,6 +2,7 @@
   "header": {
     "title": "Онлайн Система Тестирования",
     "home": "Главная",
+    "courses": "Курсы",
     "tests": "Тесты",
     "profile": "Профиль",
     "admin": "Админ",
@@ -248,6 +249,65 @@
     "openPlaceholder": "Введите ваш ответ здесь...",
     "numericPlaceholder": "Введите число...",
     "unknownType": "Неизвестный тип вопроса"
+  },
+  "forgotPassword": {
+    "title": "Забыли пароль",
+    "description": "Введите ваш email и мы отправим вам ссылку для сброса пароля.",
+    "emailPlaceholder": "Введите ваш email",
+    "sendLink": "Отправить ссылку для сброса",
+    "sending": "Отправка...",
+    "successMessage": "Токен сброса пароля был сгенерирован!",
+    "errorMessage": "Ошибка отправки ссылки. Проверьте ваш email.",
+    "tokenGenerated": "Токен сброса сгенерирован (демо-режим):",
+    "goToReset": "Сбросить пароль",
+    "backToLogin": "Вернуться к входу"
+  },
+  "resetPassword": {
+    "title": "Сброс пароля",
+    "newPassword": "Новый пароль",
+    "newPasswordPlaceholder": "Введите новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "confirmPasswordPlaceholder": "Подтвердите новый пароль",
+    "resetButton": "Сбросить пароль",
+    "resetting": "Сброс...",
+    "success": "Пароль успешно сброшен! Перенаправление на страницу входа...",
+    "failed": "Не удалось сбросить пароль",
+    "invalidToken": "Недействительный или просроченный токен сброса",
+    "noToken": "Токен сброса не предоставлен.",
+    "requestNew": "Запросить новый токен"
+  },
+  "courses": {
+    "title": "Учебные Курсы",
+    "description": "Освойте языки программирования и технологии с нашими структурированными курсами",
+    "noCourses": "В данный момент курсы недоступны.",
+    "modules": "модулей",
+    "tests": "тестов",
+    "courseModules": "Модули Курса",
+    "courseTests": "Тесты Курса",
+    "notFound": "Курс не найден"
+  },
+  "result": {
+    "title": "Результаты Теста",
+    "passed": "СДАНО",
+    "failed": "НЕ СДАНО",
+    "correctAnswers": "Правильные Ответы",
+    "points": "Баллы",
+    "passingScore": "Проходной Балл",
+    "started": "Начало",
+    "submitted": "Отправлено",
+    "duration": "Длительность",
+    "viewReview": "Подробный Обзор",
+    "retake": "Пройти Заново",
+    "notFound": "Результат не найден"
+  },
+  "certificate": {
+    "congratulations": "Поздравляем!",
+    "available": "Вы сдали тест! Можете получить сертификат.",
+    "generate": "Получить Сертификат",
+    "generating": "Генерация...",
+    "download": "Скачать Сертификат",
+    "verificationCode": "Код Проверки",
+    "issued": "Выдан"
   },
   "common": {
     "loading": "Загрузка...",

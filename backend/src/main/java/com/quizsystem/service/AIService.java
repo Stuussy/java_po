@@ -70,7 +70,7 @@ public class AIService {
         }
 
         return String.format("""
-                You are a test/quiz generator for an educational platform.
+                You are a JSON generator. Output ONLY raw JSON, no explanations, no markdown, no ```json blocks.
                 Generate a quiz test on the topic: "%s"
 
                 Requirements:
@@ -79,7 +79,7 @@ public class AIService {
                 - %s
                 - %s
 
-                IMPORTANT: Respond ONLY with a valid JSON object, no markdown, no code blocks, no extra text.
+                CRITICAL: Your entire response must be ONLY the JSON object starting with { and ending with }. No other text.
                 The JSON must follow this exact structure:
                 {
                   "title": "Test title",
@@ -139,41 +139,62 @@ public class AIService {
     private String callAIAPI(String prompt) {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("message", prompt);
-        requestBody.put("model", "premium-default");
 
-        try {
-            String response = webClient.post()
-                    .uri(apiUrl)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + apiKey)
-                    .bodyValue(requestBody)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(120))
-                    .block();
+        int maxRetries = 3;
+        int delaySeconds = 30;
 
-            log.debug("AI API raw response: {}", response);
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                log.info("Calling AI API, attempt {}/{}", attempt, maxRetries);
+                String response = webClient.post()
+                        .uri(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + apiKey)
+                        .bodyValue(requestBody)
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .timeout(Duration.ofSeconds(120))
+                        .block();
 
-            JsonNode rootNode = objectMapper.readTree(response);
+                log.debug("AI API raw response: {}", response);
 
-            String status = rootNode.path("status").asText("");
-            if (!"success".equals(status)) {
-                String errorMsg = rootNode.path("message").asText(rootNode.path("error").asText("Unknown error"));
-                throw new RuntimeException("AI API error: " + errorMsg);
+                JsonNode rootNode = objectMapper.readTree(response);
+
+                boolean success = rootNode.path("success").asBoolean(false);
+                if (!success) {
+                    String errorMsg = rootNode.path("message").asText(rootNode.path("error").asText("Unknown error"));
+                    throw new RuntimeException("AI API error: " + errorMsg);
+                }
+
+                String responseText = rootNode.path("response").asText("");
+                if (responseText.isEmpty()) {
+                    throw new RuntimeException("Empty response from AI API");
+                }
+
+                return responseText;
+
+            } catch (RuntimeException e) {
+                String msg = e.getMessage() != null ? e.getMessage() : "";
+                if (msg.contains("429") && attempt < maxRetries) {
+                    log.warn("AI API rate limit hit (429), waiting {}s before retry {}/{}...", delaySeconds, attempt + 1, maxRetries);
+                    try {
+                        Thread.sleep(delaySeconds * 1000L);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw new RuntimeException("Request interrupted");
+                    }
+                } else {
+                    if (msg.contains("429")) {
+                        throw new RuntimeException("Сервис AI временно недоступен. Подождите 30 секунд и попробуйте снова.");
+                    }
+                    throw e;
+                }
+            } catch (Exception e) {
+                log.error("Error calling AI API: {}", e.getMessage(), e);
+                throw new RuntimeException("Failed to generate test with AI: " + e.getMessage());
             }
-
-            String responseText = rootNode.path("response").asText("");
-            if (responseText.isEmpty()) {
-                throw new RuntimeException("Empty response from AI API");
-            }
-
-            return responseText;
-        } catch (RuntimeException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("Error calling AI API: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to generate test with AI: " + e.getMessage());
         }
+        throw new RuntimeException("AI API недоступен после нескольких попыток. Попробуйте позже.");
     }
 
     private Test parseTestFromResponse(String responseText, AIGenerateRequest request) {

@@ -207,14 +207,14 @@
       "generateAndSave": "Generate & Save",
       "generating": "Generating...",
       "generatingMessage": "AI is creating your test...",
-      "pleaseWait": "This may take a few moments. Gemini AI is generating questions based on your settings.",
+      "pleaseWait": "This may take a few moments. AI is generating questions based on your settings.",
       "preview": "Generated Test Preview",
       "saveAndEdit": "Save & Edit",
       "topicRequired": "Please enter a topic",
       "generateFailed": "Failed to generate test. Please try again.",
       "saveFailed": "Failed to save test",
-      "notConfigured": "Gemini AI is not configured!",
-      "notConfiguredDesc": "Set the GEMINI_API_KEY environment variable to enable AI test generation.",
+      "notConfigured": "AI is not configured!",
+      "notConfiguredDesc": "Configure the AI API key to enable AI test generation.",
       "generateWithAI": "Generate with AI"
     }
   },

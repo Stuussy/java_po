@@ -15,4 +15,24 @@ export const coursesAPI = {
     const response = await axios.get(`/courses/search?query=${query}`);
     return response.data;
   },
+
+  getCourseProgress: async (courseId) => {
+    const response = await axios.get(`/courses/${courseId}/progress`);
+    return response.data;
+  },
+
+  completeModule: async (courseId, moduleId) => {
+    const response = await axios.post(`/courses/${courseId}/modules/${moduleId}/complete`);
+    return response.data;
+  },
+
+  getMyProgress: async () => {
+    const response = await axios.get('/courses/my-progress');
+    return response.data;
+  },
+
+  getMyCompleted: async () => {
+    const response = await axios.get('/courses/my-completed');
+    return response.data;
+  },
 };

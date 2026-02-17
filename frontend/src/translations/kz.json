@@ -85,7 +85,11 @@
     "status": "Статус",
     "actions": "Әрекеттер",
     "viewResult": "Нәтижені Көру",
-    "noAttempts": "Әзірге әрекеттер жоқ."
+    "noAttempts": "Әзірге әрекеттер жоқ.",
+    "completedCourses": "Аяқталған Курстар",
+    "noCompletedCourses": "Аяқталған курстар жоқ.",
+    "myCertificates": "Менің Сертификаттарым",
+    "noCertificates": "Сертификаттар жоқ."
   },
   "avatarSelector": {
     "title": "Аватарды Таңдаңыз",
@@ -284,7 +288,12 @@
     "tests": "тест",
     "courseModules": "Курс Модульдері",
     "courseTests": "Курс Тесттері",
-    "notFound": "Курс табылмады"
+    "notFound": "Курс табылмады",
+    "completed": "Аяқталды",
+    "progress": "Прогресс",
+    "markComplete": "Аяқталды деп белгілеу",
+    "moduleCompleted": "Аяқталды",
+    "courseCompleted": "Курс аяқталды"
   },
   "result": {
     "title": "Тест Нәтижелері",

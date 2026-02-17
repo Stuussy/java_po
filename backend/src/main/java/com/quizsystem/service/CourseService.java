@@ -1,11 +1,14 @@
 package com.quizsystem.service;
 
 import com.quizsystem.model.Course;
+import com.quizsystem.model.CourseProgress;
+import com.quizsystem.repository.CourseProgressRepository;
 import com.quizsystem.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +17,7 @@ import java.util.UUID;
 public class CourseService {
 
     private final CourseRepository courseRepository;
+    private final CourseProgressRepository courseProgressRepository;
 
     public List<Course> getAllPublishedCourses() {
         return courseRepository.findByPublishedTrue();
@@ -63,5 +67,46 @@ public class CourseService {
 
     public List<Course> searchCourses(String query) {
         return courseRepository.findByTitleContainingIgnoreCase(query);
+    }
+
+    public CourseProgress getProgress(String userId, String courseId) {
+        return courseProgressRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElse(null);
+    }
+
+    public List<CourseProgress> getUserProgress(String userId) {
+        return courseProgressRepository.findByUserId(userId);
+    }
+
+    public List<CourseProgress> getCompletedCourses(String userId) {
+        return courseProgressRepository.findByUserIdAndCompletedTrue(userId);
+    }
+
+    public CourseProgress completeModule(String userId, String courseId, String moduleId) {
+        Course course = getCourseById(courseId);
+
+        CourseProgress progress = courseProgressRepository.findByUserIdAndCourseId(userId, courseId)
+                .orElse(CourseProgress.builder()
+                        .userId(userId)
+                        .courseId(courseId)
+                        .completedModuleIds(new ArrayList<>())
+                        .completed(false)
+                        .build());
+
+        if (!progress.getCompletedModuleIds().contains(moduleId)) {
+            progress.getCompletedModuleIds().add(moduleId);
+        }
+
+        if (course.getModules() != null) {
+            boolean allDone = course.getModules().stream()
+                    .allMatch(m -> progress.getCompletedModuleIds().contains(m.getId()));
+            if (allDone && !Boolean.TRUE.equals(progress.getCompleted())) {
+                progress.setCompleted(true);
+                progress.setCompletedAt(LocalDateTime.now());
+            }
+        }
+
+        progress.setUpdatedAt(LocalDateTime.now());
+        return courseProgressRepository.save(progress);
     }
 }

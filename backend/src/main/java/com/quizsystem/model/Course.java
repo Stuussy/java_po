@@ -50,6 +50,7 @@ public class Course {
         private String id;
         private String title;
         private String description;
+        private String content;
         private Integer orderIndex;
         private List<String> testIds;
     }

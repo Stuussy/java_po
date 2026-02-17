@@ -85,7 +85,11 @@
     "status": "Status",
     "actions": "Actions",
     "viewResult": "View Result",
-    "noAttempts": "No test attempts yet."
+    "noAttempts": "No test attempts yet.",
+    "completedCourses": "Completed Courses",
+    "noCompletedCourses": "No completed courses yet.",
+    "myCertificates": "My Certificates",
+    "noCertificates": "No certificates yet."
   },
   "avatarSelector": {
     "title": "Choose Your Avatar",
@@ -284,7 +288,12 @@
     "tests": "tests",
     "courseModules": "Course Modules",
     "courseTests": "Course Tests",
-    "notFound": "Course not found"
+    "notFound": "Course not found",
+    "completed": "Completed",
+    "progress": "Progress",
+    "markComplete": "Mark as Completed",
+    "moduleCompleted": "Done",
+    "courseCompleted": "Course Completed"
   },
   "result": {
     "title": "Test Results",

@@ -85,7 +85,11 @@
     "status": "Статус",
     "actions": "Действия",
     "viewResult": "Посмотреть Результат",
-    "noAttempts": "Попыток пока нет."
+    "noAttempts": "Попыток пока нет.",
+    "completedCourses": "Пройденные Курсы",
+    "noCompletedCourses": "Пройденных курсов пока нет.",
+    "myCertificates": "Мои Сертификаты",
+    "noCertificates": "Сертификатов пока нет."
   },
   "avatarSelector": {
     "title": "Выберите Аватар",
@@ -284,7 +288,12 @@
     "tests": "тестов",
     "courseModules": "Модули Курса",
     "courseTests": "Тесты Курса",
-    "notFound": "Курс не найден"
+    "notFound": "Курс не найден",
+    "completed": "Пройден",
+    "progress": "Прогресс",
+    "markComplete": "Отметить как пройденный",
+    "moduleCompleted": "Пройден",
+    "courseCompleted": "Курс пройден"
   },
   "result": {
     "title": "Результаты Теста",

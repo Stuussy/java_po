@@ -268,7 +268,7 @@ const Profile = () => {
             <p>{t('profile.noAttempts')}</p>
           ) : (
             <div style={{ overflowX: 'auto' }}>
-              <table className="table">
+              <table className="table table-mobile-cards">
                 <thead>
                   <tr>
                     <th>{t('profile.date')}</th>
@@ -281,16 +281,16 @@ const Profile = () => {
                 <tbody>
                   {attempts.map((attempt) => (
                     <tr key={attempt.id}>
-                      <td>{new Date(attempt.submittedAt || attempt.startedAt).toLocaleDateString()}</td>
-                      <td>{attempt.testId}</td>
-                      <td>
+                      <td data-label={t('profile.date')}>{new Date(attempt.submittedAt || attempt.startedAt).toLocaleDateString()}</td>
+                      <td data-label={t('profile.testId')}>{attempt.testId}</td>
+                      <td data-label={t('profile.score')}>
                         {attempt.score !== null && attempt.score !== undefined ? (
                           <span style={{ fontWeight: 'bold' }}>{attempt.score.toFixed(1)}%</span>
                         ) : (
                           '-'
                         )}
                       </td>
-                      <td>
+                      <td data-label={t('profile.status')}>
                         <span className={`badge ${
                           attempt.status === 'GRADED' ? 'badge-success' :
                           attempt.status === 'SUBMITTED' ? 'badge-info' :
@@ -299,7 +299,7 @@ const Profile = () => {
                           {attempt.status}
                         </span>
                       </td>
-                      <td>
+                      <td data-label={t('profile.actions')}>
                         {attempt.status === 'GRADED' && (
                           <Link to={`/result/${attempt.id}`} className="btn btn-primary" style={{ padding: '0.25rem 0.75rem' }}>
                             {t('profile.viewResult')}

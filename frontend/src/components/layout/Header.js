@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getAvatarById } from '../../utils/avatars';
@@ -8,7 +8,24 @@ import LanguageSwitcher from '../LanguageSwitcher';
 const Header = () => {
   const { user, logout } = useAuth();
   const { t } = useLanguage();
+  const location = useLocation();
   const currentAvatar = user ? getAvatarById(user.avatar || 'avatar1') : null;
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   return (
     <header className="header">
@@ -17,7 +34,22 @@ const Header = () => {
           <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
             <h1>{t('header.title')}</h1>
           </Link>
-          <nav className="nav">
+
+          <button
+            className={`hamburger ${menuOpen ? 'hamburger--active' : ''}`}
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className="hamburger__line"></span>
+            <span className="hamburger__line"></span>
+            <span className="hamburger__line"></span>
+          </button>
+
+          {menuOpen && (
+            <div className="nav-overlay" onClick={() => setMenuOpen(false)} />
+          )}
+
+          <nav className={`nav ${menuOpen ? 'nav--open' : ''}`}>
             <Link to="/">{t('header.home')}</Link>
             <Link to="/courses">{t('header.courses')}</Link>
             <Link to="/tests">{t('header.tests')}</Link>

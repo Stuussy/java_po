@@ -106,7 +106,7 @@ const AdminReports = () => {
                   <div className="card">
                     <h3 className="card-title">{t('admin.reports.recentAttempts')}</h3>
                     <div style={{ overflowX: 'auto' }}>
-                      <table className="table">
+                      <table className="table table-mobile-cards">
                         <thead>
                           <tr>
                             <th>{t('admin.reports.tableUserId')}</th>
@@ -119,21 +119,21 @@ const AdminReports = () => {
                         <tbody>
                           {report.attempts.slice(0, 10).map((attempt) => (
                             <tr key={attempt.id}>
-                              <td>{attempt.userId}</td>
-                              <td>{new Date(attempt.startedAt).toLocaleString()}</td>
-                              <td>
+                              <td data-label={t('admin.reports.tableUserId')}>{attempt.userId}</td>
+                              <td data-label={t('admin.reports.tableStarted')}>{new Date(attempt.startedAt).toLocaleString()}</td>
+                              <td data-label={t('admin.reports.tableSubmitted')}>
                                 {attempt.submittedAt
                                   ? new Date(attempt.submittedAt).toLocaleString()
                                   : '-'}
                               </td>
-                              <td>
+                              <td data-label={t('admin.reports.tableScore')}>
                                 {attempt.score !== null && attempt.score !== undefined ? (
                                   <strong>{attempt.score.toFixed(1)}%</strong>
                                 ) : (
                                   '-'
                                 )}
                               </td>
-                              <td>
+                              <td data-label={t('admin.reports.tableStatus')}>
                                 <span
                                   className={`badge ${
                                     attempt.status === 'GRADED'

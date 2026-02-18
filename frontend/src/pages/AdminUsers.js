@@ -60,7 +60,7 @@ const AdminUsers = () => {
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table className="table">
+            <table className="table table-mobile-cards">
               <thead>
                 <tr>
                   <th>{t('admin.users.tableName')}</th>
@@ -74,17 +74,17 @@ const AdminUsers = () => {
               <tbody>
                 {users.map((user) => (
                   <tr key={user.id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>
+                    <td data-label={t('admin.users.tableName')}>{user.name}</td>
+                    <td data-label={t('admin.users.tableEmail')}>{user.email}</td>
+                    <td data-label={t('admin.users.tableRole')}>
                       <span className={`badge ${user.role === 'ADMIN' ? 'badge-danger' : 'badge-info'}`}>
                         {user.role}
                       </span>
                     </td>
-                    <td>{user.organization || '-'}</td>
-                    <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                    <td>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <td data-label={t('admin.users.tableOrganization')}>{user.organization || '-'}</td>
+                    <td data-label={t('admin.users.tableRegistered')}>{new Date(user.createdAt).toLocaleDateString()}</td>
+                    <td data-label={t('admin.users.tableActions')}>
+                      <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
                         <button
                           onClick={() => handleRoleChange(user.id, user.role)}
                           className="btn btn-primary"

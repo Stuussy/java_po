@@ -12,6 +12,7 @@ const TestAttempt = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     loadTest();
@@ -20,10 +21,20 @@ const TestAttempt = () => {
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
       saveCurrentAnswer();
-    }, 30000); 
+    }, 30000);
 
     return () => clearInterval(autoSaveInterval);
   }, [answers, currentQuestionIndex]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   const loadTest = async () => {
     try {
@@ -76,7 +87,12 @@ const TestAttempt = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitClick = () => {
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSubmit = async () => {
+    setShowConfirmModal(false);
     await saveCurrentAnswer();
 
     try {
@@ -107,6 +123,9 @@ const TestAttempt = () => {
 
   const currentQuestion = test.questions[currentQuestionIndex];
   const currentAnswer = answers[currentQuestion.id] || {};
+  const answeredCount = Object.keys(answers).length;
+  const totalQuestions = test.questions.length;
+  const unansweredCount = totalQuestions - answeredCount;
 
   return (
     <div className="main-content">
@@ -135,7 +154,7 @@ const TestAttempt = () => {
 
             <div style={{ display: 'flex', gap: '1rem' }}>
               {currentQuestionIndex === test.questions.length - 1 ? (
-                <button onClick={handleSubmit} className="btn btn-success">
+                <button onClick={handleSubmitClick} className="btn btn-success">
                   {t('testAttempt.submitTest')}
                 </button>
               ) : (
@@ -170,6 +189,84 @@ const TestAttempt = () => {
           </div>
         </div>
       </div>
+
+      {showConfirmModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            animation: 'fadeIn 0.2s ease-out',
+          }}
+          onClick={() => setShowConfirmModal(false)}
+        >
+          <div
+            style={{
+              background: 'var(--bg-card)',
+              borderRadius: '20px',
+              padding: '2.5rem',
+              maxWidth: '480px',
+              width: '90%',
+              boxShadow: 'var(--shadow-xl)',
+              animation: 'scaleIn 0.3s ease-out',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: '700',
+              marginBottom: '1.5rem',
+              color: 'var(--text-primary)',
+              textAlign: 'center',
+            }}>
+              {t('testAttempt.submitConfirmTitle')}
+            </h2>
+
+            <div style={{
+              background: 'var(--bg-secondary)',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginBottom: '1.25rem',
+            }}>
+              <p style={{ marginBottom: '0.5rem', fontSize: '1rem' }}>
+                {t('testAttempt.submitConfirmAnswered')
+                  .replace('{answered}', answeredCount)
+                  .replace('{total}', totalQuestions)}
+              </p>
+              {unansweredCount > 0 && (
+                <p style={{ color: 'var(--warning)', fontWeight: '600', marginBottom: '0.5rem' }}>
+                  {t('testAttempt.submitConfirmUnanswered').replace('{count}', unansweredCount)}
+                </p>
+              )}
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                {t('testAttempt.submitConfirmWarning')}
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="btn btn-secondary"
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                onClick={handleConfirmSubmit}
+                className="btn btn-success"
+              >
+                {t('testAttempt.confirmSubmit')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

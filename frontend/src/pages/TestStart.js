@@ -8,16 +8,22 @@ const TestStart = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [test, setTest] = useState(null);
+  const [attemptsInfo, setAttemptsInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    loadTest();
+    loadData();
   }, [id]);
 
-  const loadTest = async () => {
+  const loadData = async () => {
     try {
-      const data = await testsAPI.getTestById(id);
-      setTest(data);
+      const [testData, infoData] = await Promise.all([
+        testsAPI.getTestById(id),
+        testsAPI.getAttemptsInfo(id),
+      ]);
+      setTest(testData);
+      setAttemptsInfo(infoData);
     } catch (error) {
       console.error('Error loading test:', error);
     } finally {
@@ -26,11 +32,16 @@ const TestStart = () => {
   };
 
   const handleStartTest = async () => {
+    setError('');
     try {
       const attempt = await testsAPI.startTest(id);
       navigate(`/test/${id}/attempt/${attempt.id}`);
     } catch (error) {
-      console.error('Error starting test:', error);
+      if (error.response?.data?.error === 'MAX_ATTEMPTS_REACHED') {
+        setError(t('testStart.maxAttemptsReached'));
+      } else {
+        setError(t('testStart.failedToStart'));
+      }
     }
   };
 
@@ -41,6 +52,8 @@ const TestStart = () => {
   if (!test) {
     return <div className="container">{t('testStart.notFound')}</div>;
   }
+
+  const canStart = attemptsInfo?.canStart !== false;
 
   return (
     <div className="main-content">
@@ -59,7 +72,21 @@ const TestStart = () => {
             <div style={{ marginBottom: '1rem' }}>
               <strong>{t('testStart.passingScore')}:</strong> {test.passingScore}%
             </div>
+            {attemptsInfo && (
+              <div style={{ marginBottom: '1rem' }}>
+                <strong>{t('testStart.attempts')}:</strong>{' '}
+                {attemptsInfo.completedAttempts} / {attemptsInfo.maxAttempts}
+              </div>
+            )}
           </div>
+
+          {error && <div className="alert alert-error">{error}</div>}
+
+          {!canStart && (
+            <div className="alert alert-error" style={{ marginBottom: '1rem' }}>
+              {t('testStart.maxAttemptsReached')}
+            </div>
+          )}
 
           <div className="alert alert-info">
             <strong>{t('testStart.instructions')}:</strong>
@@ -69,11 +96,17 @@ const TestStart = () => {
               <li>{t('testStart.instruction3')}</li>
               <li>{t('testStart.instruction4')}</li>
               <li>{t('testStart.instruction5').replace('{passingScore}', test.passingScore)}</li>
+              <li>{t('testStart.instruction6').replace('{maxAttempts}', attemptsInfo?.maxAttempts || test.maxAttempts || 3)}</li>
             </ul>
           </div>
 
           <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-            <button onClick={handleStartTest} className="btn btn-success" style={{ flex: 1 }}>
+            <button
+              onClick={handleStartTest}
+              className="btn btn-success"
+              style={{ flex: 1 }}
+              disabled={!canStart}
+            >
               {t('testStart.startTest')}
             </button>
             <button onClick={() => navigate('/tests')} className="btn btn-secondary">

@@ -18,27 +18,29 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    try {
-      const data = await authAPI.login({ email, password });
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
-      setUser(data);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await authAPI.login({ email, password });
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data));
+    setUser(data);
+    return data;
   };
 
   const register = async (userData) => {
-    try {
-      const data = await authAPI.register(userData);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data));
-      setUser(data);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const data = await authAPI.register(userData);
+    // Now returns { requiresVerification, email, message } instead of token
+    return data;
+  };
+
+  const verifyEmail = async (email, code) => {
+    const data = await authAPI.verifyEmail(email, code);
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data));
+    setUser(data);
+    return data;
+  };
+
+  const resendVerification = async (email) => {
+    return await authAPI.resendVerification(email);
   };
 
   const logout = () => {
@@ -63,6 +65,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     login,
     register,
+    verifyEmail,
+    resendVerification,
     logout,
     isAdmin,
     updateUser,

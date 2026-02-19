@@ -61,6 +61,7 @@ public class TestService {
         existingTest.setPassingScore(test.getPassingScore());
         existingTest.setTags(test.getTags());
         existingTest.setPublished(test.getPublished());
+        existingTest.setMaxAttempts(test.getMaxAttempts());
         existingTest.setQuestions(test.getQuestions());
 
         

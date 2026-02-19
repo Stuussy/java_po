@@ -11,6 +11,16 @@ export const authAPI = {
     return response.data;
   },
 
+  verifyEmail: async (email, code) => {
+    const response = await axios.post('/auth/verify-email', { email, code });
+    return response.data;
+  },
+
+  resendVerification: async (email) => {
+    const response = await axios.post('/auth/resend-verification', { email });
+    return response.data;
+  },
+
   getCurrentUser: async () => {
     const response = await axios.get('/auth/me');
     return response.data;

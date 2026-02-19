@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,33 +14,25 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "users")
-public class User {
+@Document(collection = "email_verification_tokens")
+public class EmailVerificationToken {
 
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    @Indexed
     private String email;
 
-    private String passwordHash;
+    private String code;
 
-    private String name;
+    private boolean used;
 
-    private UserRole role;
-
-    private String organization;
-
-    private String avatar;
-
-    @Builder.Default
-    private Boolean emailVerified = false;
-
-    @CreatedDate
     private LocalDateTime createdAt;
 
-    public enum UserRole {
-        USER,
-        ADMIN
+    @Indexed(expireAfterSeconds = 0)
+    private LocalDateTime expiresAt;
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiresAt);
     }
 }

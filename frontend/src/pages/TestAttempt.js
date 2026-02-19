@@ -9,14 +9,15 @@ const TestAttempt = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const [test, setTest] = useState(null);
+  const [attempt, setAttempt] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
-    loadTest();
-  }, [testId]);
+    loadTestAndAttempt();
+  }, [testId, attemptId]);
 
   useEffect(() => {
     const autoSaveInterval = setInterval(() => {
@@ -36,10 +37,20 @@ const TestAttempt = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, []);
 
-  const loadTest = async () => {
+  const loadTestAndAttempt = async () => {
     try {
-      const testData = await testsAPI.getTestById(testId);
+      const [testData, attemptData] = await Promise.all([
+        testsAPI.getTestById(testId),
+        testsAPI.getAttempt(attemptId),
+      ]);
       setTest(testData);
+      setAttempt(attemptData);
+
+      // If the attempt is already submitted/graded, redirect to result
+      if (attemptData.status === 'SUBMITTED' || attemptData.status === 'GRADED') {
+        navigate(`/result/${attemptId}`);
+        return;
+      }
     } catch (error) {
       console.error('Error loading test:', error);
     } finally {
@@ -63,6 +74,10 @@ const TestAttempt = () => {
         numericAnswer: answer.numericAnswer,
       });
     } catch (error) {
+      if (error.response?.data?.error === 'TIME_EXPIRED') {
+        navigate(`/result/${attemptId}`);
+        return;
+      }
       console.error('Error saving answer:', error);
     }
   };
@@ -129,7 +144,7 @@ const TestAttempt = () => {
 
   return (
     <div className="main-content">
-      <Timer durationMinutes={test.durationMinutes} onTimeUp={handleTimeUp} />
+      <Timer durationMinutes={test.durationMinutes} startedAt={attempt?.startedAt} onTimeUp={handleTimeUp} />
 
       <div className="container">
         <div className="card">

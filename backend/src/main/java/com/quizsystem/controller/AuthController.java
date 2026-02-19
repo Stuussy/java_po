@@ -24,13 +24,44 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
-        return ResponseEntity.ok(authService.login(request));
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest request) {
+        try {
+            return ResponseEntity.ok(authService.login(request));
+        } catch (RuntimeException e) {
+            if ("EMAIL_NOT_VERIFIED".equals(e.getMessage())) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("requiresVerification", true);
+                response.put("email", request.getEmail());
+                response.put("message", "Email not verified. A new verification code has been sent.");
+                return ResponseEntity.status(403).body(response);
+            }
+            throw e;
+        }
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<AuthResponse> verifyEmail(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String code = request.get("code");
+        return ResponseEntity.ok(authService.verifyEmail(email, code));
+    }
+
+    @PostMapping("/resend-verification")
+    public ResponseEntity<Map<String, String>> resendVerification(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        try {
+            authService.resendVerificationCode(email);
+        } catch (Exception e) {
+            // Don't reveal details
+        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "If the email exists, a new verification code has been sent");
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")

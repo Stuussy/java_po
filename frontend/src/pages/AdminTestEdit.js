@@ -15,6 +15,7 @@ const AdminTestEdit = () => {
     description: '',
     durationMinutes: 30,
     passingScore: 70,
+    maxAttempts: 3,
     category: '',
     difficulty: 'BEGINNER',
     tags: [],
@@ -217,7 +218,7 @@ const AdminTestEdit = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
               <label className="form-label">{t('admin.testEdit.duration')}</label>
               <input
@@ -240,6 +241,18 @@ const AdminTestEdit = () => {
                 onChange={handleChange}
                 min="0"
                 max="100"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">{t('admin.testEdit.maxAttempts')}</label>
+              <input
+                type="number"
+                name="maxAttempts"
+                className="form-control"
+                value={test.maxAttempts || 3}
+                onChange={handleChange}
+                min="1"
               />
             </div>
           </div>

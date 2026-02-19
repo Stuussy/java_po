@@ -146,7 +146,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!Boolean.TRUE.equals(user.getEmailVerified())) {
+        if (!Boolean.TRUE.equals(user.getEmailVerified()) && user.getRole() != User.UserRole.ADMIN) {
             sendVerificationCode(user);
             throw new RuntimeException("EMAIL_NOT_VERIFIED");
         }

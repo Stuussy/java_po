@@ -50,16 +50,13 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         try {
-            String token = authService.createPasswordResetToken(email);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Password reset instructions sent to your email");
-            response.put("resetToken", token);
-            return ResponseEntity.ok(response);
+            authService.createPasswordResetToken(email);
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "If the email exists, reset instructions have been sent");
-            return ResponseEntity.ok(response);
+            // Don't reveal whether email exists
         }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "If the email exists, password reset instructions have been sent");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reset-password")

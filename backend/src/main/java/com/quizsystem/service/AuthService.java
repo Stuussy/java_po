@@ -3,8 +3,10 @@ package com.quizsystem.service;
 import com.quizsystem.dto.AuthRequest;
 import com.quizsystem.dto.AuthResponse;
 import com.quizsystem.dto.RegisterRequest;
+import com.quizsystem.model.EmailVerificationToken;
 import com.quizsystem.model.PasswordResetToken;
 import com.quizsystem.model.User;
+import com.quizsystem.repository.EmailVerificationTokenRepository;
 import com.quizsystem.repository.PasswordResetTokenRepository;
 import com.quizsystem.repository.UserRepository;
 import com.quizsystem.security.JwtUtil;
@@ -17,7 +19,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
 @Slf4j
@@ -27,13 +31,16 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository resetTokenRepository;
+    private final EmailVerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final EmailService emailService;
 
-    public AuthResponse register(RegisterRequest request) {
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    public Map<String, Object> register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
@@ -45,22 +52,90 @@ public class AuthService {
                 .role(User.UserRole.USER)
                 .organization(request.getOrganization())
                 .avatar("avatar1")
+                .emailVerified(false)
                 .createdAt(LocalDateTime.now())
                 .build();
 
         user = userRepository.save(user);
 
+        sendVerificationCode(user);
+
+        log.info("User registered, verification email sent to {}", user.getEmail());
+
+        return Map.of(
+                "requiresVerification", true,
+                "email", user.getEmail(),
+                "message", "Verification code sent to your email"
+        );
+    }
+
+    public AuthResponse verifyEmail(String email, String code) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (Boolean.TRUE.equals(user.getEmailVerified())) {
+            throw new RuntimeException("Email already verified");
+        }
+
+        EmailVerificationToken token = verificationTokenRepository.findByEmailAndCode(email, code)
+                .orElseThrow(() -> new RuntimeException("Invalid verification code"));
+
+        if (token.isUsed()) {
+            throw new RuntimeException("This code has already been used");
+        }
+
+        if (token.isExpired()) {
+            throw new RuntimeException("Verification code has expired");
+        }
+
+        token.setUsed(true);
+        verificationTokenRepository.save(token);
+
+        user.setEmailVerified(true);
+        userRepository.save(user);
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
-        String token = jwtUtil.generateToken(userDetails, user.getRole().name());
+        String jwtToken = jwtUtil.generateToken(userDetails, user.getRole().name());
+
+        log.info("Email verified for user: {}", user.getEmail());
 
         return AuthResponse.builder()
-                .token(token)
+                .token(jwtToken)
                 .email(user.getEmail())
                 .name(user.getName())
                 .role(user.getRole().name())
                 .userId(user.getId())
                 .avatar(user.getAvatar())
                 .build();
+    }
+
+    public void resendVerificationCode(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (Boolean.TRUE.equals(user.getEmailVerified())) {
+            throw new RuntimeException("Email already verified");
+        }
+
+        sendVerificationCode(user);
+        log.info("Verification code resent to {}", email);
+    }
+
+    private void sendVerificationCode(User user) {
+        verificationTokenRepository.deleteByEmail(user.getEmail());
+
+        String code = String.format("%06d", RANDOM.nextInt(1000000));
+
+        EmailVerificationToken token = EmailVerificationToken.builder()
+                .email(user.getEmail())
+                .code(code)
+                .used(false)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .build();
+
+        verificationTokenRepository.save(token);
+        emailService.sendEmailVerificationCode(user.getEmail(), user.getName(), code);
     }
 
     public AuthResponse login(AuthRequest request) {
@@ -70,6 +145,11 @@ public class AuthService {
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!Boolean.TRUE.equals(user.getEmailVerified())) {
+            sendVerificationCode(user);
+            throw new RuntimeException("EMAIL_NOT_VERIFIED");
+        }
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = jwtUtil.generateToken(userDetails, user.getRole().name());

@@ -1,7 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const Timer = ({ durationMinutes, onTimeUp }) => {
-  const [timeLeft, setTimeLeft] = useState(durationMinutes * 60);
+const Timer = ({ durationMinutes, startedAt, onTimeUp }) => {
+  const calculateTimeLeft = useCallback(() => {
+    if (startedAt) {
+      const startTime = new Date(startedAt).getTime();
+      const endTime = startTime + durationMinutes * 60 * 1000;
+      const remaining = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+      return remaining;
+    }
+    return durationMinutes * 60;
+  }, [durationMinutes, startedAt]);
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft);
 
   useEffect(() => {
     if (timeLeft <= 0) {
@@ -10,11 +20,15 @@ const Timer = ({ durationMinutes, onTimeUp }) => {
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
+      const remaining = calculateTimeLeft();
+      setTimeLeft(remaining);
+      if (remaining <= 0) {
+        clearInterval(timer);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, onTimeUp]);
+  }, [timeLeft <= 0, calculateTimeLeft, onTimeUp]);
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;

@@ -41,13 +41,18 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await register({
+      const result = await register({
         name: formData.name,
         email: formData.email,
         password: formData.password,
         organization: formData.organization,
       });
-      navigate('/tests');
+
+      if (result.requiresVerification) {
+        navigate('/verify-email', { state: { email: formData.email } });
+      } else {
+        navigate('/tests');
+      }
     } catch (err) {
       setError(err.response?.data?.message || t('register.registrationFailed'));
     } finally {

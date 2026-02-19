@@ -91,4 +91,63 @@ public class EmailService {
             log.error("Failed to send password reset email to {}: {}", toEmail, e.getMessage());
         }
     }
+
+    @Async
+    public void sendEmailVerificationCode(String toEmail, String userName, String code) {
+        String subject = "Email Verification - Online Quiz System";
+
+        String htmlContent = """
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f0f4f8;">
+                    <div style="max-width:600px;margin:0 auto;padding:40px 20px;">
+                        <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                            <div style="background:linear-gradient(135deg,#667eea 0%%,#14b8a6 100%%);padding:40px 30px;text-align:center;">
+                                <h1 style="color:white;margin:0;font-size:24px;font-weight:700;">Online Quiz System</h1>
+                                <p style="color:rgba(255,255,255,0.9);margin:8px 0 0;font-size:14px;">Email Verification</p>
+                            </div>
+                            <div style="padding:40px 30px;">
+                                <p style="color:#334155;font-size:16px;margin:0 0 16px;">Hello, <strong>%s</strong>!</p>
+                                <p style="color:#64748b;font-size:14px;line-height:1.6;margin:0 0 24px;">
+                                    Thank you for registering. Please use the verification code below to confirm your email address.
+                                    This code is valid for <strong>15 minutes</strong>.
+                                </p>
+                                <div style="text-align:center;margin:32px 0;">
+                                    <div style="display:inline-block;background:#f1f5f9;border:2px dashed #667eea;border-radius:12px;padding:20px 40px;">
+                                        <span style="font-size:36px;font-weight:700;letter-spacing:8px;color:#334155;">%s</span>
+                                    </div>
+                                </div>
+                                <div style="border-top:1px solid #e2e8f0;padding-top:20px;margin-top:20px;">
+                                    <p style="color:#94a3b8;font-size:12px;line-height:1.5;margin:0;">
+                                        If you did not create an account, you can safely ignore this email.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="text-align:center;color:#94a3b8;font-size:12px;margin-top:24px;">
+                            &copy; 2025 Online Quiz System. All rights reserved.
+                        </p>
+                    </div>
+                </body>
+                </html>
+                """.formatted(userName, code);
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(fromEmail);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            mailSender.send(message);
+            log.info("Verification email sent to {}", toEmail);
+        } catch (MessagingException e) {
+            log.error("Failed to send verification email to {}: {}", toEmail, e.getMessage());
+        }
+    }
 }

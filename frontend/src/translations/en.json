@@ -91,6 +91,19 @@
     "passwordTooShort": "Password must be at least 6 characters",
     "registrationFailed": "Registration failed"
   },
+  "verify": {
+    "title": "Verify Your Email",
+    "description": "We've sent a 6-digit verification code to {email}. Enter the code below to confirm your email.",
+    "submit": "Verify Email",
+    "verifying": "Verifying...",
+    "invalidCode": "Invalid verification code",
+    "codeIncomplete": "Please enter the complete 6-digit code",
+    "codeSent": "A new verification code has been sent to your email",
+    "noCode": "Didn't receive the code?",
+    "resend": "Resend Code",
+    "resendIn": "Resend in {seconds}s",
+    "resendFailed": "Failed to resend code"
+  },
   "profile": {
     "title": "My Profile",
     "changeAvatar": "Change Avatar",
@@ -185,7 +198,8 @@
       "saveDraft": "Save as Draft",
       "publish": "Publish Test",
       "cancel": "Cancel",
-      "saveFailed": "Failed to save test"
+      "saveFailed": "Failed to save test",
+      "maxAttempts": "Max Attempts"
     },
     "users": {
       "title": "Manage Users",
@@ -255,10 +269,13 @@
     "instruction3": "You can navigate between questions using Next/Previous buttons",
     "instruction4": "Click \"Submit Test\" when you're done",
     "instruction5": "You need at least {passingScore}% to pass",
+    "instruction6": "You have a maximum of {maxAttempts} attempts for this test",
     "startTest": "Start Test",
     "cancel": "Cancel",
     "notFound": "Test not found",
-    "failedToStart": "Failed to start test"
+    "failedToStart": "Failed to start test",
+    "attempts": "Attempts Used",
+    "maxAttemptsReached": "You have reached the maximum number of attempts for this test"
   },
   "testAttempt": {
     "questionOf": "Question {current} of {total}",

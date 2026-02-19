@@ -34,6 +34,10 @@ const Login = () => {
         navigate('/tests');
       }
     } catch (err) {
+      if (err.response?.status === 403 && err.response?.data?.requiresVerification) {
+        navigate('/verify-email', { state: { email: formData.email } });
+        return;
+      }
       setError(err.response?.data?.message || t('login.invalidEmailOrPassword'));
     } finally {
       setLoading(false);

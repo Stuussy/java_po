@@ -37,6 +37,9 @@ public class Test {
 
     private Boolean published;
 
+    @Builder.Default
+    private Integer maxAttempts = 3;
+
     private List<Question> questions;
 
     private String createdBy;

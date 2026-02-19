@@ -31,6 +31,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final EmailService emailService;
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -83,7 +84,7 @@ public class AuthService {
                 .build();
     }
 
-    public String createPasswordResetToken(String email) {
+    public void createPasswordResetToken(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -101,9 +102,9 @@ public class AuthService {
 
         resetTokenRepository.save(resetToken);
 
-        log.info("Password reset token generated for {}: {}", email, tokenValue);
+        emailService.sendPasswordResetEmail(email, user.getName(), tokenValue);
 
-        return tokenValue;
+        log.info("Password reset token generated and email sent for {}", email);
     }
 
     public boolean validateResetToken(String token) {

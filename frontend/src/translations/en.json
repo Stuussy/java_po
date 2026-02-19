@@ -286,10 +286,11 @@
     "emailPlaceholder": "Enter your email address",
     "sendLink": "Send Reset Link",
     "sending": "Sending...",
-    "successMessage": "Password reset token has been generated!",
-    "errorMessage": "Error sending reset link. Please check your email.",
-    "tokenGenerated": "Reset token generated (demo mode):",
-    "goToReset": "Reset Password",
+    "errorMessage": "Error sending reset link. Please try again later.",
+    "emailSentTitle": "Check Your Email",
+    "emailSentDesc": "We've sent password reset instructions to {email}. Please check your inbox.",
+    "checkSpam": "Don't see the email? Check your spam or junk folder. The link is valid for 1 hour.",
+    "tryAnotherEmail": "Try Another Email",
     "backToLogin": "Back to Login"
   },
   "resetPassword": {

@@ -41,7 +41,9 @@ public class AuthService {
     private static final SecureRandom RANDOM = new SecureRandom();
 
     public Map<String, Object> register(RegisterRequest request) {
+        log.debug("Processing registration for email: {}", request.getEmail());
         if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Registration rejected — duplicate email: {}", request.getEmail());
             throw new RuntimeException("Email already registered");
         }
 
@@ -70,6 +72,7 @@ public class AuthService {
     }
 
     public AuthResponse verifyEmail(String email, String code) {
+        log.debug("Verifying email {} with code", email);
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -139,6 +142,7 @@ public class AuthService {
     }
 
     public AuthResponse login(AuthRequest request) {
+        log.debug("Authenticating user: {}", request.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
@@ -147,9 +151,12 @@ public class AuthService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!Boolean.TRUE.equals(user.getEmailVerified()) && user.getRole() != User.UserRole.ADMIN) {
+            log.info("Login blocked for unverified user: {}, resending verification code", request.getEmail());
             sendVerificationCode(user);
             throw new RuntimeException("EMAIL_NOT_VERIFIED");
         }
+
+        log.info("User authenticated successfully: {}, role: {}", user.getEmail(), user.getRole());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = jwtUtil.generateToken(userDetails, user.getRole().name());

@@ -22,6 +22,7 @@ public class TestAttemptService {
     private final TestService testService;
 
     public TestAttempt startAttempt(String testId, String userId) {
+        log.debug("Starting attempt for test {} by user {}", testId, userId);
         Test test = testService.getTestById(testId);
 
         // Check max attempts limit
@@ -33,6 +34,7 @@ public class TestAttemptService {
                 .collect(Collectors.toList());
 
         if (completedAttempts.size() >= maxAttempts) {
+            log.warn("Max attempts reached for user {} on test {} ({}/{})", userId, testId, completedAttempts.size(), maxAttempts);
             throw new RuntimeException("MAX_ATTEMPTS_REACHED");
         }
 
@@ -56,6 +58,7 @@ public class TestAttemptService {
                     throw new RuntimeException("MAX_ATTEMPTS_REACHED");
                 }
             } else {
+                log.info("Returning existing in-progress attempt {} for user {} on test {}", existing.getId(), userId, testId);
                 return existing;
             }
         }
@@ -68,7 +71,9 @@ public class TestAttemptService {
                 .answers(new ArrayList<>())
                 .build();
 
-        return attemptRepository.save(attempt);
+        TestAttempt saved = attemptRepository.save(attempt);
+        log.info("New attempt {} created for user {} on test {}", saved.getId(), userId, testId);
+        return saved;
     }
 
     public TestAttempt saveAnswer(String attemptId, AnswerRequest answerRequest) {
@@ -82,7 +87,7 @@ public class TestAttemptService {
         // Server-side timer check
         Test test = testService.getTestById(attempt.getTestId());
         if (isAttemptTimedOut(attempt, test)) {
-            // Auto-submit on timeout
+            log.warn("Time expired for attempt {}, auto-submitting with current answers", attemptId);
             attempt.setSubmittedAt(LocalDateTime.now());
             attempt.setStatus(TestAttempt.AttemptStatus.SUBMITTED);
             gradeAttempt(attempt);
@@ -105,6 +110,7 @@ public class TestAttemptService {
     }
 
     public TestAttempt submitAttempt(String attemptId) {
+        log.info("Processing submit for attempt {}", attemptId);
         TestAttempt attempt = attemptRepository.findById(attemptId)
                 .orElseThrow(() -> new RuntimeException("Attempt not found"));
 
@@ -128,7 +134,11 @@ public class TestAttemptService {
 
         gradeAttempt(attempt);
 
-        return attemptRepository.save(attempt);
+        TestAttempt result = attemptRepository.save(attempt);
+        log.info("Attempt {} graded: score={}%, earned={}/{} points",
+                attemptId, String.format("%.1f", result.getScore()),
+                result.getEarnedPoints(), result.getTotalPoints());
+        return result;
     }
 
     private boolean isAttemptTimedOut(TestAttempt attempt, Test test) {

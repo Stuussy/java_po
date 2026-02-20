@@ -88,8 +88,19 @@
     "hasAccount": "Аккаунт бар ма?",
     "loginLink": "Кіру",
     "passwordMismatch": "Құпия сөздер сәйкес келмейді",
-    "passwordTooShort": "Құпия сөз кемінде 6 таңбадан тұруы керек",
+    "passwordTooShort": "Құпия сөз кемінде 8 таңбадан тұруы керек",
     "registrationFailed": "Тіркелу сәтсіз аяқталды"
+  },
+  "password": {
+    "passwordMinLength": "Кемінде 8 таңба",
+    "passwordUppercase": "Кемінде 1 бас әріп (A-Z)",
+    "passwordLowercase": "Кемінде 1 кіші әріп (a-z)",
+    "passwordDigit": "Кемінде 1 сан (0-9)",
+    "passwordSpecial": "Кемінде 1 арнайы таңба (!@#$%...)",
+    "passwordNoSpaces": "Бос орын болмауы керек",
+    "weak": "Әлсіз",
+    "medium": "Орташа",
+    "strong": "Сенімді"
   },
   "verify": {
     "title": "Email-ді Растаңыз",

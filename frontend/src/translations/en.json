@@ -88,8 +88,19 @@
     "hasAccount": "Already have an account?",
     "loginLink": "Login",
     "passwordMismatch": "Passwords do not match",
-    "passwordTooShort": "Password must be at least 6 characters",
+    "passwordTooShort": "Password must be at least 8 characters",
     "registrationFailed": "Registration failed"
+  },
+  "password": {
+    "passwordMinLength": "At least 8 characters",
+    "passwordUppercase": "At least 1 uppercase letter (A-Z)",
+    "passwordLowercase": "At least 1 lowercase letter (a-z)",
+    "passwordDigit": "At least 1 digit (0-9)",
+    "passwordSpecial": "At least 1 special character (!@#$%...)",
+    "passwordNoSpaces": "Must not contain spaces",
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong"
   },
   "verify": {
     "title": "Verify Your Email",

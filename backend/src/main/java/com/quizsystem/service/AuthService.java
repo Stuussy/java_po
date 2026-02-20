@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.quizsystem.util.PasswordValidator;
+
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -201,6 +203,8 @@ public class AuthService {
     }
 
     public void resetPassword(String token, String newPassword) {
+        PasswordValidator.assertValid(newPassword);
+
         PasswordResetToken resetToken = resetTokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid or expired reset token"));
 

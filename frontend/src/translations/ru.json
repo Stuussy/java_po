@@ -88,8 +88,19 @@
     "hasAccount": "Уже есть аккаунт?",
     "loginLink": "Войти",
     "passwordMismatch": "Пароли не совпадают",
-    "passwordTooShort": "Пароль должен содержать минимум 6 символов",
+    "passwordTooShort": "Пароль должен содержать минимум 8 символов",
     "registrationFailed": "Ошибка регистрации"
+  },
+  "password": {
+    "passwordMinLength": "Минимум 8 символов",
+    "passwordUppercase": "Минимум 1 заглавная буква (A-Z)",
+    "passwordLowercase": "Минимум 1 строчная буква (a-z)",
+    "passwordDigit": "Минимум 1 цифра (0-9)",
+    "passwordSpecial": "Минимум 1 спецсимвол (!@#$%...)",
+    "passwordNoSpaces": "Не должен содержать пробелы",
+    "weak": "Слабый",
+    "medium": "Средний",
+    "strong": "Надёжный"
   },
   "verify": {
     "title": "Подтвердите Email",

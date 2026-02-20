@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { authAPI } from '../api/auth';
 import { useLanguage } from '../contexts/LanguageContext';
+import { validatePassword, getPasswordStrength } from '../utils/passwordValidator';
 
 const ResetPassword = () => {
   const { t } = useLanguage();
@@ -15,6 +16,12 @@ const ResetPassword = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [tokenValid, setTokenValid] = useState(null);
+
+  const passwordErrors = useMemo(() => validatePassword(newPassword), [newPassword]);
+  const strength = useMemo(() => getPasswordStrength(newPassword), [newPassword]);
+
+  const strengthLabel = strength === 3 ? t('password.strong') : strength === 2 ? t('password.medium') : t('password.weak');
+  const strengthColor = strength === 3 ? '#22c55e' : strength === 2 ? '#f59e0b' : '#ef4444';
 
   useEffect(() => {
     if (token) {
@@ -40,8 +47,8 @@ const ResetPassword = () => {
     setError('');
     setMessage('');
 
-    if (newPassword.length < 6) {
-      setError(t('register.passwordTooShort'));
+    if (passwordErrors.length > 0) {
+      setError(passwordErrors.map(key => t(`password.${key}`)).join('. '));
       return;
     }
 
@@ -56,7 +63,7 @@ const ResetPassword = () => {
       setMessage(t('resetPassword.success'));
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {
-      setError(err.response?.data?.error || t('resetPassword.failed'));
+      setError(err.response?.data?.error || err.response?.data?.message || t('resetPassword.failed'));
     } finally {
       setLoading(false);
     }
@@ -122,9 +129,34 @@ const ResetPassword = () => {
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder={t('resetPassword.newPasswordPlaceholder')}
                   required
-                  minLength={6}
+                  minLength={8}
                   disabled={loading}
                 />
+                {newPassword && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '4px', marginBottom: '4px' }}>
+                      {[1, 2, 3].map(i => (
+                        <div key={i} style={{
+                          height: '4px',
+                          flex: 1,
+                          borderRadius: '2px',
+                          background: i <= strength ? strengthColor : '#e2e8f0',
+                          transition: 'background 0.3s',
+                        }} />
+                      ))}
+                    </div>
+                    <span style={{ fontSize: '0.75rem', color: strengthColor, fontWeight: 600 }}>
+                      {strengthLabel}
+                    </span>
+                  </div>
+                )}
+                <ul style={{ margin: '0.5rem 0 0', padding: '0 0 0 1.2rem', fontSize: '0.8rem', color: '#64748b' }}>
+                  <li style={{ color: newPassword.length >= 8 ? '#22c55e' : '#94a3b8' }}>{t('password.passwordMinLength')}</li>
+                  <li style={{ color: /[A-Z]/.test(newPassword) ? '#22c55e' : '#94a3b8' }}>{t('password.passwordUppercase')}</li>
+                  <li style={{ color: /[a-z]/.test(newPassword) ? '#22c55e' : '#94a3b8' }}>{t('password.passwordLowercase')}</li>
+                  <li style={{ color: /\d/.test(newPassword) ? '#22c55e' : '#94a3b8' }}>{t('password.passwordDigit')}</li>
+                  <li style={{ color: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?~`]/.test(newPassword) ? '#22c55e' : '#94a3b8' }}>{t('password.passwordSpecial')}</li>
+                </ul>
               </div>
 
               <div className="form-group">
@@ -136,7 +168,7 @@ const ResetPassword = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder={t('resetPassword.confirmPasswordPlaceholder')}
                   required
-                  minLength={6}
+                  minLength={8}
                   disabled={loading}
                 />
               </div>

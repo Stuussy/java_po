@@ -4,6 +4,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { getAvatarById } from '../../utils/avatars';
 import LanguageSwitcher from '../LanguageSwitcher';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 const Header = () => {
   const { user, logout } = useAuth();
@@ -86,7 +87,10 @@ const Header = () => {
                 <Link to="/register">{t('header.register')}</Link>
               </>
             )}
-            <LanguageSwitcher />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <ThemeSwitcher />
+              <LanguageSwitcher />
+            </div>
           </nav>
         </div>
       </div>

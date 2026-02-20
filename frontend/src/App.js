@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import PrivateRoute from './components/layout/PrivateRoute';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
@@ -35,6 +36,7 @@ import AdminReports from './pages/AdminReports';
 function App() {
   return (
     <Router>
+      <ThemeProvider>
       <LanguageProvider>
         <AuthProvider>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -162,6 +164,7 @@ function App() {
         </div>
       </AuthProvider>
       </LanguageProvider>
+      </ThemeProvider>
     </Router>
   );
 }

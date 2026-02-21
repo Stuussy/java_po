@@ -1,57 +1,195 @@
 # Online Quiz System
 
-A full-stack web application for creating and taking online quizzes with instant results.
+Полнофункциональная веб-платформа для создания и прохождения онлайн-тестов с мгновенными результатами, AI-генерацией вопросов и сертификатами.
 
-## Technologies
+## О проекте
 
-- **Frontend**: React 18
-- **Backend**: Java Spring Boot 3.1.5
-- **Database**: MongoDB
-- **Authentication**: JWT
+Online Quiz System — это образовательная платформа, которая позволяет преподавателям создавать тесты (в том числе с помощью ИИ), а студентам — проходить их, получать оценки и сертификаты. Проект поддерживает три языка интерфейса и две темы оформления.
 
-## Features
+---
 
-### User Features
-- User registration and authentication
-- Browse available tests
-- Take tests with timer and auto-save
-- View instant results after completion
-- Detailed answer review
-- Test history and profile management
+## Технологии
 
-### Admin Features
-- Create, edit, and delete tests
-- Multiple question types:
-  - Single choice
-  - Multiple choice
-  - True/False
-  - Open-ended
-  - Numeric
-- User management
-- Test analytics and reports
-- Dashboard with statistics
+| Слой | Технология | Версия |
+|------|-----------|--------|
+| **Backend** | Java + Spring Boot | 3.1.5 (Java 17) |
+| **Frontend** | React | 18.2.0 |
+| **База данных** | MongoDB | Latest |
+| **Аутентификация** | JWT (JJWT) | 0.11.5 |
+| **Маршрутизация** | React Router DOM | 6.20.0 |
+| **HTTP-клиент** | Axios | 1.6.2 |
+| **AI-сервис** | ApiFreeLLM | — |
+| **Email** | Spring Mail + Gmail SMTP | — |
+| **Безопасность** | Spring Security + BCrypt | — |
+| **Сборка** | Maven (backend), npm (frontend) | — |
 
-## Prerequisites
+---
 
-- Java 17 or higher
-- Node.js 16 or higher
-- MongoDB (running on localhost:27017)
-- Maven
+## Возможности
 
-## Installation
+### Для пользователей
+- Регистрация с подтверждением email (код верификации)
+- Вход/выход с JWT-аутентификацией
+- Сброс пароля через email
+- Строгая валидация паролей
+- Просмотр и поиск опубликованных тестов
+- Прохождение тестов с таймером обратного отсчёта
+- Автосохранение ответов каждые 30 секунд
+- Мгновенные результаты и детальный обзор ответов
+- Ограничение количества попыток (по умолчанию 3)
+- Генерация и скачивание сертификатов (PNG)
+- Курсы с модулями и привязанными тестами
+- Отслеживание прогресса по курсам
+- Выбор аватара для профиля
+- История прохождения тестов
+- 3 языка интерфейса: English, Русский, Қазақша
+- 2 темы: светлая и тёмная
 
-### 1. Clone the repository
+### Для администратора
+- Создание, редактирование и удаление тестов
+- 5 типов вопросов: одиночный выбор, множественный выбор, правда/ложь, открытый ответ, числовой ответ
+- 3 уровня сложности: начальный, средний, продвинутый
+- AI-генерация тестов (предпросмотр + сохранение)
+- Управление пользователями (роли, удаление)
+- Управление курсами (создание, редактирование, модули)
+- Аналитика и отчёты по тестам
+- Панель управления со статистикой
+- Публикация / черновик тестов
 
-```bash
-git clone <repository-url>
-cd java_po
+---
+
+## Страницы (20)
+
+### Публичные
+| Страница | Маршрут | Описание |
+|----------|---------|----------|
+| Главная | `/` | Лендинг с избранными тестами и курсами |
+| Вход | `/login` | Форма авторизации |
+| Регистрация | `/register` | Форма регистрации |
+| Подтверждение email | `/verify-email` | Ввод кода верификации |
+| Забыли пароль | `/forgot-password` | Запрос сброса пароля |
+| Сброс пароля | `/reset-password` | Форма нового пароля |
+| Тесты | `/tests` | Каталог тестов с поиском |
+| Курсы | `/courses` | Каталог курсов |
+| Детали курса | `/courses/:id` | Модули, тесты, прогресс |
+
+### Для авторизованных пользователей
+| Страница | Маршрут | Описание |
+|----------|---------|----------|
+| Начало теста | `/test/:id/start` | Информация о тесте и кнопка старта |
+| Прохождение теста | `/test/:id/attempt/:attemptId` | Интерфейс тестирования с таймером |
+| Результат | `/result/:attemptId` | Оценка, процент, статус |
+| Обзор ответов | `/result/:attemptId/review` | Детальный разбор ответов |
+| Профиль | `/profile` | Данные пользователя, история, аватар |
+
+### Админ-панель
+| Страница | Маршрут | Описание |
+|----------|---------|----------|
+| Дашборд | `/admin` | Статистика платформы |
+| Управление тестами | `/admin/tests` | CRUD тестов |
+| Редактор теста | `/admin/tests/new`, `/admin/tests/:id/edit` | Конструктор вопросов |
+| AI-генерация | `/admin/ai-generate` | Генерация тестов через ИИ |
+| Пользователи | `/admin/users` | Управление ролями |
+| Отчёты | `/admin/reports` | Аналитика по тестам |
+
+---
+
+## Архитектура
+
+```
+java_po/
+├── backend/
+│   └── src/main/java/com/quizsystem/
+│       ├── controller/        # 5 REST-контроллеров
+│       ├── model/             # 8 моделей MongoDB
+│       ├── repository/        # 8 репозиториев
+│       ├── service/           # 7 сервисов
+│       ├── security/          # JWT, фильтры, Spring Security
+│       ├── dto/               # DTO-объекты
+│       ├── config/            # Конфигурация и инициализация
+│       └── QuizSystemApplication.java
+│
+├── frontend/src/
+│   ├── pages/                 # 20 страниц
+│   ├── components/
+│   │   ├── layout/            # Header, Footer, PrivateRoute
+│   │   ├── auth/              # AvatarSelector
+│   │   └── tests/             # Timer
+│   ├── contexts/              # AuthContext, LanguageContext, ThemeContext
+│   ├── api/                   # 5 API-клиентов (axios)
+│   ├── translations/          # en.json, ru.json, kz.json
+│   ├── utils/                 # avatars, passwordValidator
+│   └── index.css              # Глобальные стили + темы
+│
+└── README.md
 ```
 
-### 2. Setup MongoDB
+---
 
-Make sure MongoDB is running on `localhost:27017`. The application will automatically create the `quiz_system` database.
+## Модели данных (MongoDB)
 
-### 3. Backend Setup
+| Модель | Описание | Ключевые поля |
+|--------|----------|---------------|
+| **User** | Пользователь | email, name, role (USER/ADMIN), avatar, emailVerified |
+| **Test** | Тест | title, questions[], durationMinutes, passingScore, difficulty, maxAttempts |
+| **TestAttempt** | Попытка прохождения | testId, userId, answers[], score, status (IN_PROGRESS/SUBMITTED/GRADED) |
+| **Course** | Курс | title, modules[], testIds[], difficulty, category |
+| **CourseProgress** | Прогресс по курсу | userId, courseId, completedModuleIds[], completed |
+| **Certificate** | Сертификат | studentName, testTitle, score, verificationCode |
+| **EmailVerificationToken** | Токен верификации | email, code, expiresAt (TTL) |
+| **PasswordResetToken** | Токен сброса пароля | email, token, expiresAt (TTL) |
+
+---
+
+## API (основные эндпоинты)
+
+### Аутентификация (`/api/auth`)
+- `POST /register` — регистрация
+- `POST /login` — вход
+- `POST /verify-email` — подтверждение email
+- `POST /forgot-password` — запрос сброса пароля
+- `POST /reset-password` — сброс пароля
+- `GET /me` — текущий пользователь
+- `PUT /update-avatar` — обновление аватара
+
+### Тесты (`/api/tests`)
+- `GET /` — список опубликованных тестов
+- `GET /search?query=` — поиск
+- `POST /{id}/start` — начать тест
+- `POST /{testId}/attempt/{attemptId}/answer` — сохранить ответ
+- `POST /{testId}/attempt/{attemptId}/submit` — завершить тест
+- `GET /attempt/{attemptId}` — результат
+- `GET /my-attempts` — история попыток
+
+### Курсы (`/api/courses`)
+- `GET /` — список курсов
+- `GET /{id}` — детали курса
+- `POST /{courseId}/modules/{moduleId}/complete` — завершить модуль
+- `GET /my-progress` — прогресс пользователя
+
+### Сертификаты (`/api/certificates`)
+- `POST /generate/{attemptId}` — генерация
+- `GET /{id}/download` — скачать PNG
+- `GET /verify/{code}` — проверка подлинности
+
+### Админ (`/api/admin`, требуется роль ADMIN)
+- CRUD для тестов, пользователей, курсов
+- `POST /ai/generate` — AI-генерация теста (предпросмотр)
+- `POST /ai/generate-and-save` — AI-генерация + сохранение
+- `GET /reports/dashboard` — статистика платформы
+- `GET /reports/test/{id}` — отчёт по тесту
+
+---
+
+## Установка и запуск
+
+### Требования
+- Java 17+
+- Node.js 16+
+- MongoDB (localhost:27017)
+- Maven
+
+### Backend
 
 ```bash
 cd backend
@@ -59,9 +197,9 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-The backend will start on `http://localhost:8080`
+Запустится на `http://localhost:8080`
 
-### 4. Frontend Setup
+### Frontend
 
 ```bash
 cd frontend
@@ -69,215 +207,29 @@ npm install
 npm start
 ```
 
-The frontend will start on `http://localhost:3000`
+Запустится на `http://localhost:3000`
 
-## Usage
+### Аккаунты по умолчанию
 
-### Default Accounts
+| Роль | Email | Пароль |
+|------|-------|--------|
+| Admin | admin@quiz.com | admin123 |
+| User | user@quiz.com | user123 |
 
-The application automatically creates default accounts on first startup:
+---
 
-**Admin Account:**
-- Email: `admin@quiz.com`
-- Password: `admin123`
-- Role: ADMIN
+## Безопасность
 
-**Test User Account:**
-- Email: `user@quiz.com`
-- Password: `user123`
-- Role: USER
+- Хеширование паролей через BCrypt
+- JWT-токены (срок действия 24 часа)
+- Ролевой доступ (USER / ADMIN)
+- Защищённые маршруты на фронтенде и бэкенде
+- CORS-настройка (только localhost:3000)
+- Строгая политика паролей
+- TTL-индексы для автоудаления истёкших токенов
 
-### First Time Setup
+---
 
-1. Open `http://localhost:3000` in your browser
-2. Login with one of the default accounts above, or register a new account
-3. New registered users have the USER role by default
-
-### User Flow
-
-1. **Login/Register**: Create an account or login
-2. **Browse Tests**: View available published tests
-3. **Take Test**:
-   - Click "Start Test" to begin
-   - Answer questions within the time limit
-   - Answers are auto-saved every 30 seconds
-   - Submit when complete
-4. **View Results**: See score, percentage, and pass/fail status
-5. **Review Answers**: Check detailed breakdown of correct/incorrect answers
-6. **Profile**: View test history and personal information
-
-### Admin Flow
-
-1. **Login as Admin**: Use admin credentials
-2. **Dashboard**: View statistics (total users, tests, etc.)
-3. **Manage Tests**:
-   - Create new tests
-   - Add questions with various types
-   - Set duration and passing score
-   - Publish or save as draft
-4. **Manage Users**: View all users, change roles, delete users
-5. **Reports**: View test statistics and user performance
-
-## API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/login` - Login user
-- `GET /api/auth/me` - Get current user
-
-### Tests
-- `GET /api/tests` - Get all published tests
-- `GET /api/tests/{id}` - Get test by ID
-- `GET /api/tests/search?query={query}` - Search tests
-- `POST /api/tests/{id}/start` - Start test attempt
-- `POST /api/tests/{testId}/attempt/{attemptId}/answer` - Save answer
-- `POST /api/tests/{testId}/attempt/{attemptId}/submit` - Submit test
-- `GET /api/tests/attempt/{attemptId}` - Get attempt result
-- `GET /api/tests/my-attempts` - Get user's test attempts
-
-### Admin (Requires ADMIN role)
-- `GET /api/admin/tests` - Get all tests (including drafts)
-- `POST /api/admin/tests` - Create test
-- `PUT /api/admin/tests/{id}` - Update test
-- `DELETE /api/admin/tests/{id}` - Delete test
-- `GET /api/admin/users` - Get all users
-- `DELETE /api/admin/users/{id}` - Delete user
-- `PUT /api/admin/users/{id}/role` - Update user role
-- `GET /api/admin/reports/test/{id}` - Get test report
-- `GET /api/admin/reports/dashboard` - Get dashboard statistics
-
-## Project Structure
-
-```
-java_po/
-├── backend/
-│   ├── src/main/java/com/quizsystem/
-│   │   ├── controller/       # REST controllers
-│   │   ├── model/            # MongoDB models
-│   │   ├── repository/       # Data access layer
-│   │   ├── service/          # Business logic
-│   │   ├── security/         # JWT and security config
-│   │   ├── dto/              # Data transfer objects
-│   │   └── QuizSystemApplication.java
-│   ├── src/main/resources/
-│   │   └── application.properties
-│   └── pom.xml
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── api/              # API clients
-│   │   ├── components/       # React components
-│   │   │   ├── auth/
-│   │   │   ├── tests/
-│   │   │   ├── admin/
-│   │   │   └── layout/
-│   │   ├── contexts/         # React contexts
-│   │   ├── hooks/            # Custom hooks
-│   │   ├── pages/            # Page components
-│   │   ├── App.js
-│   │   └── index.js
-│   └── package.json
-└── README.md
-```
-
-## Configuration
-
-### Backend Configuration
-
-Edit `backend/src/main/resources/application.properties`:
-
-```properties
-# Server Port
-server.port=8080
-
-# MongoDB
-spring.data.mongodb.uri=mongodb://localhost:27017/quiz_system
-
-# JWT
-jwt.secret=your-secret-key
-jwt.expiration=86400000
-
-# CORS
-cors.allowed-origins=http://localhost:3000
-```
-
-### Frontend Configuration
-
-The frontend uses a proxy to connect to the backend. This is configured in `frontend/package.json`:
-
-```json
-"proxy": "http://localhost:8080"
-```
-
-## Testing
-
-### Creating a Test Quiz
-
-1. Login as admin
-2. Go to "Admin" -> "Manage Tests"
-3. Click "Create New Test"
-4. Fill in test details:
-   - Title
-   - Description
-   - Duration (minutes)
-   - Passing score (%)
-   - Tags
-5. Add questions:
-   - Click "Add Question"
-   - Select question type
-   - Enter question text
-   - Add choices (for choice-based questions)
-   - Mark correct answers
-   - Set points
-6. Save as draft or publish
-
-### Taking a Test
-
-1. Login as regular user
-2. Browse available tests
-3. Click "Start Test"
-4. Answer questions
-5. Submit when complete
-6. View results and review answers
-
-## Security
-
-- Passwords are hashed using BCrypt
-- JWT tokens for authentication
-- Role-based access control (USER, ADMIN)
-- Protected routes on both frontend and backend
-- CORS configuration for API security
-
-## Troubleshooting
-
-### MongoDB Connection Error
-- Ensure MongoDB is running: `mongod`
-- Check connection URL in `application.properties`
-
-### Port Already in Use
-- Backend (8080): Change in `application.properties`
-- Frontend (3000): Change in `package.json` or use: `PORT=3001 npm start`
-
-### CORS Errors
-- Check `cors.allowed-origins` in `application.properties`
-- Verify frontend proxy configuration
-
-## Future Enhancements
-
-- Email verification
-- Password reset functionality
-- File upload for questions (images)
-- PDF certificate generation
-- Real-time test monitoring for admins
-- Test categories and filtering
-- Leaderboards
-- Social features (share results)
-- Mobile app
-
-## License
+## Лицензия
 
 MIT License
-
-## Support
-
-For issues and questions, please create an issue in the repository.

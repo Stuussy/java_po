@@ -25,7 +25,7 @@ import Result from './pages/Result';
 import Review from './pages/Review';
 import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
-
+import VerifyCertificate from './pages/VerifyCertificate';
 
 import AdminDashboard from './pages/AdminDashboard';
 import AdminTests from './pages/AdminTests';
@@ -56,6 +56,7 @@ function App() {
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/verify/:code" element={<VerifyCertificate />} />
 
               {}
               <Route path="/tests" element={<Tests />} />

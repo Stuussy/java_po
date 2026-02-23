@@ -1,5 +1,10 @@
 package com.quizsystem.service;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.quizsystem.model.Certificate;
 import com.quizsystem.model.Test;
 import com.quizsystem.model.TestAttempt;
@@ -8,6 +13,7 @@ import com.quizsystem.repository.CertificateRepository;
 import com.quizsystem.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -17,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +36,9 @@ public class CertificateService {
     private final TestAttemptService attemptService;
     private final TestService testService;
     private final UserRepository userRepository;
+
+    @Value("${app.base-url:http://localhost:3000}")
+    private String baseUrl;
 
     public Certificate getOrCreateCertificate(String attemptId, String userId) {
         Optional<Certificate> existing = certificateRepository.findByAttemptId(attemptId);
@@ -156,8 +166,9 @@ public class CertificateService {
             String dateStr = cert.getIssuedAt().format(DateTimeFormatter.ofPattern("dd MMMM yyyy"));
             drawCenteredString(g2d, "Date: " + dateStr, width, 520);
 
-            // QR code area
-            BufferedImage qrCode = generateQrCode(cert.getVerificationCode(), 120);
+            // QR code area — real scannable QR code
+            String verifyUrl = baseUrl + "/verify/" + cert.getVerificationCode();
+            BufferedImage qrCode = generateQrCode(verifyUrl, 120);
             int qrX = width - 190;
             int qrY = height - 220;
             g2d.drawImage(qrCode, qrX, qrY, null);
@@ -202,51 +213,35 @@ public class CertificateService {
     }
 
     private BufferedImage generateQrCode(String text, int size) {
-        // Simple QR-like pattern generation (visual representation)
-        BufferedImage qrImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = qrImage.createGraphics();
+        try {
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            Map<EncodeHintType, Object> hints = Map.of(
+                    EncodeHintType.MARGIN, 1,
+                    EncodeHintType.CHARACTER_SET, "UTF-8"
+            );
+            BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, size, size, hints);
 
-        // White background
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, size, size);
-
-        // Generate deterministic pattern from verification code
-        g.setColor(Color.BLACK);
-        int moduleSize = size / 21;
-        int hash = text.hashCode();
-
-        // Finder patterns (3 corners)
-        drawFinderPattern(g, 0, 0, moduleSize);
-        drawFinderPattern(g, (21 - 7) * moduleSize, 0, moduleSize);
-        drawFinderPattern(g, 0, (21 - 7) * moduleSize, moduleSize);
-
-        // Data modules
-        java.util.Random rng = new java.util.Random(hash);
-        for (int row = 0; row < 21; row++) {
-            for (int col = 0; col < 21; col++) {
-                // Skip finder pattern areas
-                if ((row < 8 && col < 8) || (row < 8 && col > 12) || (row > 12 && col < 8)) continue;
-                if (rng.nextBoolean()) {
-                    g.fillRect(col * moduleSize, row * moduleSize, moduleSize, moduleSize);
+            BufferedImage qrImage = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    qrImage.setRGB(x, y, bitMatrix.get(x, y) ? Color.BLACK.getRGB() : Color.WHITE.getRGB());
                 }
             }
+            return qrImage;
+        } catch (WriterException e) {
+            log.error("Failed to generate QR code: {}", e.getMessage());
+            // Fallback: white image with text
+            BufferedImage fallback = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = fallback.createGraphics();
+            g.setColor(Color.WHITE);
+            g.fillRect(0, 0, size, size);
+            g.setColor(Color.BLACK);
+            g.drawRect(0, 0, size - 1, size - 1);
+            g.setFont(new Font("SansSerif", Font.PLAIN, 10));
+            g.drawString("QR Error", 10, size / 2);
+            g.dispose();
+            return fallback;
         }
-
-        // Border
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, size - 1, size - 1);
-
-        g.dispose();
-        return qrImage;
-    }
-
-    private void drawFinderPattern(Graphics2D g, int x, int y, int moduleSize) {
-        g.setColor(Color.BLACK);
-        g.fillRect(x, y, 7 * moduleSize, 7 * moduleSize);
-        g.setColor(Color.WHITE);
-        g.fillRect(x + moduleSize, y + moduleSize, 5 * moduleSize, 5 * moduleSize);
-        g.setColor(Color.BLACK);
-        g.fillRect(x + 2 * moduleSize, y + 2 * moduleSize, 3 * moduleSize, 3 * moduleSize);
     }
 
     private void drawCenteredString(Graphics2D g, String text, int width, int y) {

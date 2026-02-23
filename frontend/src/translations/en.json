@@ -427,5 +427,15 @@
     "design": "Design",
     "business": "Business",
     "other": "Other"
+  },
+  "verifyCert": {
+    "valid": "Certificate Verified",
+    "invalid": "Certificate Not Found",
+    "invalidDesc": "This verification code is invalid or does not exist.",
+    "student": "Student",
+    "test": "Test",
+    "score": "Score",
+    "issued": "Issued",
+    "code": "Verification Code"
   }
 }

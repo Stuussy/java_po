@@ -8,7 +8,8 @@
     "admin": "Админ",
     "login": "Вход",
     "register": "Регистрация",
-    "logout": "Выход"
+    "logout": "Выход",
+    "leaderboard": "Рейтинг"
   },
   "home": {
     "welcome": "Добро пожаловать в Онлайн Систему Тестирования",
@@ -210,7 +211,10 @@
       "publish": "Опубликовать Тест",
       "cancel": "Отмена",
       "saveFailed": "Не удалось сохранить тест",
-      "maxAttempts": "Макс. попыток"
+      "maxAttempts": "Макс. попыток",
+      "imageUrl": "URL Изображения (необязательно)",
+      "imageUrlPlaceholder": "https://example.com/image.png",
+      "selectCategory": "Выберите Категорию"
     },
     "users": {
       "title": "Управление Пользователями",
@@ -399,5 +403,29 @@
     "next": "Далее",
     "previous": "Предыдущий",
     "submit": "Отправить"
+  },
+  "leaderboard": {
+    "title": "Рейтинг",
+    "description": "Лучшие студенты по сумме набранных баллов",
+    "empty": "Результатов пока нет. Будьте первым, кто пройдёт тест!",
+    "player": "Студент",
+    "totalPoints": "Всего Баллов",
+    "points": "баллов",
+    "avgScore": "Ср. Балл",
+    "bestScore": "Лучший",
+    "testsCompleted": "Тесты",
+    "attempts": "Попытки",
+    "you": "вы"
+  },
+  "categories": {
+    "programming": "Программирование",
+    "mathematics": "Математика",
+    "science": "Естествознание",
+    "history": "История",
+    "languages": "Языки",
+    "it": "IT и Сети",
+    "design": "Дизайн",
+    "business": "Бизнес",
+    "other": "Другое"
   }
 }

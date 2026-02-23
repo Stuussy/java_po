@@ -54,6 +54,7 @@ const Header = () => {
             <Link to="/">{t('header.home')}</Link>
             <Link to="/courses">{t('header.courses')}</Link>
             <Link to="/tests">{t('header.tests')}</Link>
+            <Link to="/leaderboard">{t('header.leaderboard')}</Link>
             {user ? (
               <>
                 <Link to="/profile" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

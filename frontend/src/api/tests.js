@@ -62,4 +62,9 @@ export const testsAPI = {
     const response = await axios.get('/certificates/my');
     return response.data;
   },
+
+  getLeaderboard: async () => {
+    const response = await axios.get('/tests/leaderboard');
+    return response.data;
+  },
 };

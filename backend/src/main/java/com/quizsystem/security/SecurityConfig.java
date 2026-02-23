@@ -42,6 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/tests").permitAll()
                         .requestMatchers("/api/tests/{id}").permitAll()
                         .requestMatchers("/api/tests/search").permitAll()
+                        .requestMatchers("/api/tests/leaderboard").permitAll()
                         .requestMatchers("/api/courses").permitAll()
                         .requestMatchers("/api/courses/search").permitAll()
                         .requestMatchers("/api/courses/my-progress").authenticated()

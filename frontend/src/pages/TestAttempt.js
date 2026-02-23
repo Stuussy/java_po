@@ -154,6 +154,16 @@ const TestAttempt = () => {
 
           <h2 className="question-text">{currentQuestion.text}</h2>
 
+          {currentQuestion.imageUrl && (
+            <div style={{ margin: '1rem 0', textAlign: 'center' }}>
+              <img
+                src={currentQuestion.imageUrl}
+                alt="Question"
+                style={{ maxWidth: '100%', maxHeight: '400px', borderRadius: '12px', border: '1px solid var(--border)' }}
+              />
+            </div>
+          )}
+
           <div style={{ marginTop: '2rem' }}>
             {renderQuestion(currentQuestion, currentAnswer, handleAnswerChange, t)}
           </div>

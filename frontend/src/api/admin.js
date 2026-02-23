@@ -53,12 +53,12 @@ export const adminAPI = {
   },
 
   generateTestWithAI: async (request) => {
-    const response = await axios.post('/admin/ai/generate', request);
+    const response = await axios.post('/admin/ai/generate', request, { timeout: 120000 });
     return response.data;
   },
 
   generateAndSaveTestWithAI: async (request) => {
-    const response = await axios.post('/admin/ai/generate-and-save', request);
+    const response = await axios.post('/admin/ai/generate-and-save', request, { timeout: 120000 });
     return response.data;
   },
 };

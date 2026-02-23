@@ -8,7 +8,8 @@
     "admin": "Admin",
     "login": "Login",
     "register": "Register",
-    "logout": "Logout"
+    "logout": "Logout",
+    "leaderboard": "Leaderboard"
   },
   "home": {
     "welcome": "Welcome to Online Quiz System",
@@ -210,7 +211,10 @@
       "publish": "Publish Test",
       "cancel": "Cancel",
       "saveFailed": "Failed to save test",
-      "maxAttempts": "Max Attempts"
+      "maxAttempts": "Max Attempts",
+      "imageUrl": "Image URL (optional)",
+      "imageUrlPlaceholder": "https://example.com/image.png",
+      "selectCategory": "Select Category"
     },
     "users": {
       "title": "Manage Users",
@@ -399,5 +403,29 @@
     "next": "Next",
     "previous": "Previous",
     "submit": "Submit"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "description": "Top students ranked by total points earned",
+    "empty": "No results yet. Be the first to take a test!",
+    "player": "Student",
+    "totalPoints": "Total Points",
+    "points": "points",
+    "avgScore": "Avg Score",
+    "bestScore": "Best Score",
+    "testsCompleted": "Tests",
+    "attempts": "Attempts",
+    "you": "you"
+  },
+  "categories": {
+    "programming": "Programming",
+    "mathematics": "Mathematics",
+    "science": "Science",
+    "history": "History",
+    "languages": "Languages",
+    "it": "IT & Networks",
+    "design": "Design",
+    "business": "Business",
+    "other": "Other"
   }
 }

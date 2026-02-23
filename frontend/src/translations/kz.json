@@ -8,7 +8,8 @@
     "admin": "Әкімші",
     "login": "Кіру",
     "register": "Тіркелу",
-    "logout": "Шығу"
+    "logout": "Шығу",
+    "leaderboard": "Рейтинг"
   },
   "home": {
     "welcome": "Онлайн Тест Жүйесіне Қош Келдіңіз",
@@ -210,7 +211,10 @@
       "publish": "Тестті Жариялау",
       "cancel": "Болдырмау",
       "saveFailed": "Тестті сақтау сәтсіз аяқталды",
-      "maxAttempts": "Макс. әрекеттер"
+      "maxAttempts": "Макс. әрекеттер",
+      "imageUrl": "Сурет URL (міндетті емес)",
+      "imageUrlPlaceholder": "https://example.com/image.png",
+      "selectCategory": "Санатты Таңдаңыз"
     },
     "users": {
       "title": "Пайдаланушыларды Басқару",
@@ -399,5 +403,29 @@
     "next": "Келесі",
     "previous": "Алдыңғы",
     "submit": "Жіберу"
+  },
+  "leaderboard": {
+    "title": "Рейтинг",
+    "description": "Жинаған ұпайлары бойынша үздік студенттер",
+    "empty": "Нәтижелер жоқ. Тест тапсырған алғашқы адам болыңыз!",
+    "player": "Студент",
+    "totalPoints": "Барлық Ұпайлар",
+    "points": "ұпай",
+    "avgScore": "Орт. Ұпай",
+    "bestScore": "Үздік",
+    "testsCompleted": "Тесттер",
+    "attempts": "Әрекеттер",
+    "you": "сіз"
+  },
+  "categories": {
+    "programming": "Бағдарламалау",
+    "mathematics": "Математика",
+    "science": "Жаратылыстану",
+    "history": "Тарих",
+    "languages": "Тілдер",
+    "it": "IT және Желілер",
+    "design": "Дизайн",
+    "business": "Бизнес",
+    "other": "Басқа"
   }
 }

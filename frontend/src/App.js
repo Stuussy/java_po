@@ -24,6 +24,7 @@ import TestAttempt from './pages/TestAttempt';
 import Result from './pages/Result';
 import Review from './pages/Review';
 import Profile from './pages/Profile';
+import Leaderboard from './pages/Leaderboard';
 
 
 import AdminDashboard from './pages/AdminDashboard';
@@ -54,6 +55,7 @@ function App() {
               {}
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetail />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
 
               {}
               <Route path="/tests" element={<Tests />} />

@@ -193,14 +193,23 @@ const AdminTestEdit = () => {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-group">
               <label className="form-label">{t('admin.testEdit.category')}</label>
-              <input
-                type="text"
+              <select
                 name="category"
                 className="form-control"
                 value={test.category}
                 onChange={handleChange}
-                placeholder={t('admin.testEdit.categoryPlaceholder')}
-              />
+              >
+                <option value="">{t('admin.testEdit.selectCategory')}</option>
+                <option value="Programming">{t('categories.programming')}</option>
+                <option value="Mathematics">{t('categories.mathematics')}</option>
+                <option value="Science">{t('categories.science')}</option>
+                <option value="History">{t('categories.history')}</option>
+                <option value="Languages">{t('categories.languages')}</option>
+                <option value="IT & Networks">{t('categories.it')}</option>
+                <option value="Design">{t('categories.design')}</option>
+                <option value="Business">{t('categories.business')}</option>
+                <option value="Other">{t('categories.other')}</option>
+              </select>
             </div>
 
             <div className="form-group">
@@ -386,6 +395,27 @@ const AdminTestEdit = () => {
                   value={question.text}
                   onChange={(e) => updateQuestion(qIndex, 'text', e.target.value)}
                 />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">{t('admin.testEdit.imageUrl')}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={question.imageUrl || ''}
+                  onChange={(e) => updateQuestion(qIndex, 'imageUrl', e.target.value)}
+                  placeholder={t('admin.testEdit.imageUrlPlaceholder')}
+                />
+                {question.imageUrl && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <img
+                      src={question.imageUrl}
+                      alt="Question"
+                      style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px', border: '1px solid var(--border)' }}
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="form-group">

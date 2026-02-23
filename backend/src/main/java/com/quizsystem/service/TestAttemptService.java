@@ -240,4 +240,8 @@ public class TestAttemptService {
     public List<TestAttempt> getTestAttempts(String testId) {
         return attemptRepository.findByTestId(testId);
     }
+
+    public List<TestAttempt> getAllGradedAttempts() {
+        return attemptRepository.findByStatus(TestAttempt.AttemptStatus.GRADED);
+    }
 }

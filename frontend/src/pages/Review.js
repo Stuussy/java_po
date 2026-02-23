@@ -76,6 +76,16 @@ const Review = () => {
                 {question.text}
               </div>
 
+              {question.imageUrl && (
+                <div style={{ margin: '0 0 1.5rem', textAlign: 'center' }}>
+                  <img
+                    src={question.imageUrl}
+                    alt="Question"
+                    style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '8px', border: '1px solid var(--border)' }}
+                  />
+                </div>
+              )}
+
               {renderQuestionReview(question, answer, correctChoices)}
 
               <div style={{ marginTop: '1rem', padding: '1rem', background: '#f8f9fa', borderRadius: '4px' }}>

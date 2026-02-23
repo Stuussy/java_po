@@ -13,9 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -126,5 +125,69 @@ public class TestController {
         info.put("maxAttempts", maxAttempts);
         info.put("canStart", completedAttempts < maxAttempts);
         return ResponseEntity.ok(info);
+    }
+
+    @GetMapping("/leaderboard")
+    public ResponseEntity<List<Map<String, Object>>> getLeaderboard() {
+        log.debug("Fetching leaderboard");
+        List<TestAttempt> allAttempts = attemptService.getAllGradedAttempts();
+
+        // Group by userId, find best score per user, count tests taken
+        Map<String, List<TestAttempt>> byUser = allAttempts.stream()
+                .collect(Collectors.groupingBy(TestAttempt::getUserId));
+
+        List<Map<String, Object>> leaderboard = new ArrayList<>();
+
+        for (Map.Entry<String, List<TestAttempt>> entry : byUser.entrySet()) {
+            String userId = entry.getKey();
+            List<TestAttempt> userAttempts = entry.getValue();
+
+            double avgScore = userAttempts.stream()
+                    .filter(a -> a.getScore() != null)
+                    .mapToDouble(TestAttempt::getScore)
+                    .average()
+                    .orElse(0.0);
+
+            double bestScore = userAttempts.stream()
+                    .filter(a -> a.getScore() != null)
+                    .mapToDouble(TestAttempt::getScore)
+                    .max()
+                    .orElse(0.0);
+
+            long testsCompleted = userAttempts.stream()
+                    .map(TestAttempt::getTestId)
+                    .distinct()
+                    .count();
+
+            int totalPoints = userAttempts.stream()
+                    .filter(a -> a.getEarnedPoints() != null)
+                    .mapToInt(TestAttempt::getEarnedPoints)
+                    .sum();
+
+            // Get user info
+            Optional<User> user = userRepository.findById(userId);
+            if (user.isEmpty()) continue;
+
+            Map<String, Object> row = new HashMap<>();
+            row.put("userId", userId);
+            row.put("name", user.get().getName());
+            row.put("avatar", user.get().getAvatar());
+            row.put("avgScore", Math.round(avgScore * 10.0) / 10.0);
+            row.put("bestScore", Math.round(bestScore * 10.0) / 10.0);
+            row.put("testsCompleted", testsCompleted);
+            row.put("totalPoints", totalPoints);
+            row.put("attemptsCount", userAttempts.size());
+
+            leaderboard.add(row);
+        }
+
+        // Sort by totalPoints desc, then by avgScore desc
+        leaderboard.sort((a, b) -> {
+            int cmp = Integer.compare((int) b.get("totalPoints"), (int) a.get("totalPoints"));
+            if (cmp != 0) return cmp;
+            return Double.compare((double) b.get("avgScore"), (double) a.get("avgScore"));
+        });
+
+        return ResponseEntity.ok(leaderboard);
     }
 }

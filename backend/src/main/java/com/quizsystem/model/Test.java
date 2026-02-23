@@ -55,9 +55,10 @@ public class Test {
         private String id;
         private QuestionType type;
         private String text;
+        private String imageUrl;
         private List<Choice> choices;
         private Integer points;
-        private String correctAnswer; 
+        private String correctAnswer;
     }
 
     @Data

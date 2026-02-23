@@ -55,7 +55,9 @@ public class AuthController {
                 return ResponseEntity.status(403).body(response);
             }
             log.warn("Login failed for email: {} — {}", request.getEmail(), e.getMessage());
-            throw e;
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Invalid email or password");
+            return ResponseEntity.status(401).body(errorResponse);
         }
     }
 

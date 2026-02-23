@@ -302,8 +302,7 @@ const AdminTestEdit = () => {
             const isExpanded = expandedQuestions[qIndex] !== false; 
             return (
               <div key={question.id} className="card" style={{
-                background: 'linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%)',
-                border: '2px solid #e0f2fe',
+                border: '2px solid var(--border)',
                 marginBottom: '1rem'
               }}>
                 <div style={{
@@ -312,7 +311,7 @@ const AdminTestEdit = () => {
                   alignItems: 'center',
                   marginBottom: isExpanded ? '1rem' : '0',
                   padding: '0.5rem',
-                  background: '#e0f2fe',
+                  background: 'var(--bg-tertiary)',
                   borderRadius: '8px',
                   cursor: 'pointer'
                 }} onClick={() => toggleQuestionExpand(qIndex)}>
@@ -321,7 +320,7 @@ const AdminTestEdit = () => {
                     <h3 style={{ margin: 0 }}>{t('admin.testEdit.question')} {qIndex + 1}</h3>
                     {!isExpanded && question.text && (
                       <span style={{
-                        color: '#64748b',
+                        color: 'var(--text-muted)',
                         fontSize: '0.9rem',
                         maxWidth: '400px',
                         overflow: 'hidden',

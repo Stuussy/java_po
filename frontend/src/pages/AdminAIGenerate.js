@@ -102,15 +102,11 @@ const AdminAIGenerate = () => {
         <h1 className="card-title">{t('admin.ai.title')}</h1>
 
         {!aiConfigured && (
-          <div className="card" style={{
-            background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-            border: '2px solid #f59e0b',
-            marginBottom: '1.5rem'
-          }}>
-            <p style={{ margin: 0, fontWeight: 'bold', color: '#92400e' }}>
+          <div className="alert alert-info" style={{ marginBottom: '1.5rem' }}>
+            <p style={{ margin: 0, fontWeight: 'bold' }}>
               {t('admin.ai.notConfigured')}
             </p>
-            <p style={{ margin: '0.5rem 0 0', color: '#92400e', fontSize: '0.9rem' }}>
+            <p style={{ margin: '0.5rem 0 0', fontSize: '0.9rem' }}>
               {t('admin.ai.notConfiguredDesc')}
             </p>
           </div>
@@ -201,14 +197,7 @@ const AdminAIGenerate = () => {
           </div>
 
           {error && (
-            <div style={{
-              padding: '1rem',
-              background: '#fee2e2',
-              border: '1px solid #ef4444',
-              borderRadius: '8px',
-              color: '#dc2626',
-              marginBottom: '1rem'
-            }}>
+            <div className="alert alert-error">
               {error}
             </div>
           )}
@@ -246,7 +235,7 @@ const AdminAIGenerate = () => {
               &#129302;
             </div>
             <h3>{t('admin.ai.generatingMessage')}</h3>
-            <p style={{ color: '#64748b' }}>{t('admin.ai.pleaseWait')}</p>
+            <p style={{ color: 'var(--text-muted)' }}>{t('admin.ai.pleaseWait')}</p>
             <style>
               {`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}
             </style>
@@ -255,8 +244,7 @@ const AdminAIGenerate = () => {
 
         {generatedTest && !loading && (
           <div className="card" style={{
-            background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
-            border: '2px solid #22c55e'
+            border: '2px solid var(--success)'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h2 style={{ margin: 0 }}>{t('admin.ai.preview')}</h2>
@@ -269,9 +257,9 @@ const AdminAIGenerate = () => {
               </button>
             </div>
 
-            <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'white', borderRadius: '8px' }}>
+            <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
               <h3>{generatedTest.title}</h3>
-              <p style={{ color: '#64748b' }}>{generatedTest.description}</p>
+              <p style={{ color: 'var(--text-muted)' }}>{generatedTest.description}</p>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
                 <span className="badge badge-info">{generatedTest.category}</span>
                 <span className="badge badge-info">{t(`difficulty.${generatedTest.difficulty}`)}</span>
@@ -288,9 +276,9 @@ const AdminAIGenerate = () => {
               <div key={index} style={{
                 marginBottom: '1rem',
                 padding: '1rem',
-                background: 'white',
+                background: 'var(--bg-secondary)',
                 borderRadius: '8px',
-                border: '1px solid #e2e8f0'
+                border: '1px solid var(--border)'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
                   <h4 style={{ margin: 0 }}>
@@ -308,8 +296,8 @@ const AdminAIGenerate = () => {
                     padding: '0.5rem 0.75rem',
                     marginBottom: '0.25rem',
                     borderRadius: '4px',
-                    background: choice.isCorrect ? '#dcfce7' : '#f8fafc',
-                    border: choice.isCorrect ? '1px solid #22c55e' : '1px solid #e2e8f0',
+                    background: choice.isCorrect ? 'rgba(16, 185, 129, 0.15)' : 'var(--bg-primary)',
+                    border: choice.isCorrect ? '1px solid var(--success)' : '1px solid var(--border)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.5rem'
@@ -320,7 +308,7 @@ const AdminAIGenerate = () => {
                 ))}
 
                 {question.correctAnswer && (
-                  <p style={{ marginTop: '0.5rem', color: '#16a34a', fontStyle: 'italic' }}>
+                  <p style={{ marginTop: '0.5rem', color: 'var(--success)', fontStyle: 'italic' }}>
                     {t('admin.testEdit.correctAnswer')}: {question.correctAnswer}
                   </p>
                 )}

@@ -26,6 +26,10 @@ import Review from './pages/Review';
 import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
 import VerifyCertificate from './pages/VerifyCertificate';
+import FAQ from './pages/FAQ';
+import Support from './pages/Support';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 import AdminDashboard from './pages/AdminDashboard';
 import AdminTests from './pages/AdminTests';
@@ -57,6 +61,10 @@ function App() {
               <Route path="/courses/:id" element={<CourseDetail />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/verify/:code" element={<VerifyCertificate />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
 
               {}
               <Route path="/tests" element={<Tests />} />

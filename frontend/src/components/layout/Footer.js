@@ -77,18 +77,18 @@ const Footer = () => {
               {t('footer.resources')}
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              <Link to="/faq" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>
                 {t('footer.faq')}
-              </span>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              </Link>
+              <Link to="/support" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>
                 {t('footer.support')}
-              </span>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              </Link>
+              <Link to="/privacy" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>
                 {t('footer.privacyPolicy')}
-              </span>
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              </Link>
+              <Link to="/terms" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}>
                 {t('footer.termsOfService')}
-              </span>
+              </Link>
             </div>
           </div>
 

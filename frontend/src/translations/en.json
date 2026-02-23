@@ -437,5 +437,62 @@
     "score": "Score",
     "issued": "Issued",
     "code": "Verification Code"
+  },
+  "faqPage": {
+    "title": "Frequently Asked Questions",
+    "q1": "How do I start taking a test?",
+    "a1": "Go to the Tests page, select a test you want to take, and click \"Start Test\". You will see the test instructions and can begin when ready.",
+    "q2": "Can I retake a test?",
+    "a2": "Yes, you can retake tests up to the maximum number of attempts set by the administrator. Your best score will be recorded.",
+    "q3": "How are test scores calculated?",
+    "a3": "Each question has a point value. Your score is calculated as the percentage of points earned out of the total possible points.",
+    "q4": "How do I get a certificate?",
+    "a4": "After passing a test (scoring above the passing threshold), you can generate a certificate from the results page. The certificate includes a QR code for verification.",
+    "q5": "What types of questions are available?",
+    "a5": "The platform supports single choice, multiple choice, true/false, open-ended, and numeric question types.",
+    "q6": "Can I change my password?",
+    "a6": "Yes, use the \"Forgot Password\" link on the login page to reset your password. A reset link will be sent to your registered email."
+  },
+  "supportPage": {
+    "title": "Support",
+    "contactTitle": "Contact Us",
+    "contactDesc": "If you have any questions, issues, or suggestions, please don't hesitate to reach out to our support team.",
+    "responseTime": "Response Time",
+    "responseTimeValue": "Within 24 hours on business days",
+    "commonIssues": "Common Issues",
+    "issue1Title": "Cannot log in to my account",
+    "issue1Desc": "Make sure you are using the correct email and password. If you forgot your password, use the \"Forgot Password\" feature on the login page.",
+    "issue2Title": "Test timer ran out",
+    "issue2Desc": "If your test timer expired, the test is automatically submitted with your current answers. Contact your administrator if you need another attempt.",
+    "issue3Title": "Certificate not generating",
+    "issue3Desc": "Certificates are only available for tests you have passed. Make sure your score meets the passing threshold."
+  },
+  "privacyPage": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: February 2026",
+    "section1Title": "1. Information We Collect",
+    "section1Text": "We collect information you provide when registering an account, including your name, email address, and organization. We also collect data about your test attempts, scores, and course progress to provide our educational services.",
+    "section2Title": "2. How We Use Your Information",
+    "section2Text": "Your information is used to provide and improve our educational platform, including managing your account, tracking your learning progress, generating certificates, and displaying leaderboard rankings.",
+    "section3Title": "3. Data Security",
+    "section3Text": "We implement industry-standard security measures to protect your personal data, including encrypted password storage, secure HTTPS connections, and JWT-based authentication.",
+    "section4Title": "4. Data Sharing",
+    "section4Text": "We do not sell or share your personal information with third parties. Your test results may be visible to administrators for educational reporting purposes.",
+    "section5Title": "5. Contact",
+    "section5Text": "If you have questions about this privacy policy, please contact us at support@quizsystem.com."
+  },
+  "termsPage": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: February 2026",
+    "section1Title": "1. Acceptance of Terms",
+    "section1Text": "By accessing and using the Online Quiz System, you agree to be bound by these terms of service. If you do not agree to these terms, please do not use the platform.",
+    "section2Title": "2. User Accounts",
+    "section2Text": "You are responsible for maintaining the confidentiality of your account credentials. You must provide accurate information during registration and keep your account information up to date.",
+    "section3Title": "3. Acceptable Use",
+    "section3Text": "You agree to use the platform for legitimate educational purposes only. Cheating, sharing test answers, creating fake accounts, or any form of academic dishonesty is prohibited.",
+    "section4Title": "4. Intellectual Property",
+    "section4Text": "All test content, course materials, and platform features are the intellectual property of their respective creators. Unauthorized reproduction or distribution is prohibited.",
+    "section5Title": "5. Limitation of Liability",
+    "section5Text": "The platform is provided \"as is\" without warranties of any kind. We are not liable for any damages arising from the use of our services, including but not limited to data loss or service interruptions."
   }
 }
